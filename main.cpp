@@ -3,6 +3,8 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include "./Board.h"
+#include "./Player.h"
 
 int main() {
 
@@ -31,11 +33,10 @@ int main() {
 
     std::cout << "Spieler 1 ist am Zug!\n";
     brett.place_word("message",5,1,"d",*p1);
-    std::cout << "Fehler! Daher hat sich nichts verÃ¤ndert\n";
+    std::cout << "Fehler! Daher hat sich nichts verändert\n";
     std::cout << "Er hat immernoch "<< p1.get_score() <<" Punkte!\n";
 
     brett.display();
 
     return 0;
 }
-
