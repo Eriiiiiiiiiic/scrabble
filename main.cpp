@@ -17,7 +17,7 @@ int main() {
     brett.display();
 
     std::cout << "Spieler 1 ist am Zug!\n";
-    brett.place_word("WORLD",2,4,"d",&p1);
+    brett.place_word("worlds",2,4,"d",&p1);
     std::cout << "Spieler 1 hat gespielt!\n";
     std::cout << "Er hat "<< p1.get_score() <<" Punkte!\n";
 
@@ -25,15 +25,15 @@ int main() {
 
 
     std::cout << "Spieler 2 ist am Zug!\n";
-    brett.place_word("MATHS",5,2,"r",&p2);
+    brett.place_word("Maths",5,2,"r",&p2);
     std::cout << "Spieler 2 hat gespielt!\n";
     std::cout << "Er hat "<< p2.get_score() <<" Punkte!\n";
 
     brett.display();
 
     std::cout << "Spieler 1 ist am Zug!\n";
-    brett.place_word("MESSAGE",5,1,"d",&p1);
-    std::cout << "Fehler! Daher hat sich nichts verändert\n";
+    brett.place_word("message",5,1,"d",&p1);
+    std::cout << "Fehler! Daher hat sich nichts ver�ndert\n";
     std::cout << "Er hat immernoch "<< p1.get_score() <<" Punkte!\n";
 
     brett.display();
