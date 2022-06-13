@@ -16,6 +16,8 @@ class Player{
 
         void steine_ziehen(Board*);
 
+        void stein_setzen(char);
+
         void add_to_score(int);
 
         int get_score();
@@ -26,3 +28,4 @@ class Player{
 };
 
 #endif  // PLAYER_H_
+
