@@ -28,4 +28,3 @@ class Player{
 };
 
 #endif  // PLAYER_H_
-

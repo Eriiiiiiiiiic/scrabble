@@ -3,6 +3,7 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include <windows.h>
 
 #ifndef BOARD_H_
 #define BOARD_H_
