@@ -10,7 +10,7 @@ Board::Board() {
         letters.push_back(temp_vec);
     }
     ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
-                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPÄJÜVÖXQY&&";
+                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÃ„JÃœVÃ–XQY&& */
 
 }
 
@@ -79,16 +79,16 @@ void Board::place_word(std::string word, int x_start, int y_start,
 
     bool error = false;
 
-    /* Das Wort muss hier vllt in Großbuchstaben umgewandelt werden */
+    /* Das Wort muss hier vllt in GroÃŸbuchstaben umgewandelt werden */
     for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu Großbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /*Überprüfe ob es ein kleinbuchstabe ist */
+        /* Mit ASCII einen 32 bit Shift zu GroÃŸbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /*ÃœberprÃ¼fe ob es ein kleinbuchstabe ist */
         {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu Großbuchstaben */
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu GroÃŸbuchstaben */
         }
     }
 
-    if (direction == "d") {
+    if (direction == "v") {
         if (word.length() + y_start <= 15 && y_start >= 0) {
             for (int index = 0; index < word.length(); index++) {
                 if (letters_temp[y_start + index][x_start] == '.' || letters_temp[y_start + index][x_start] == char(word[index])) {
@@ -105,7 +105,7 @@ void Board::place_word(std::string word, int x_start, int y_start,
             std::cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
         }
     }
-    if (direction == "r") {
+    if (direction == "h") {
         if (word.length() + x_start <= 15 && x_start >= 0) {
             for (int index = 0; index < word.length(); index++) {
                 if (letters_temp[y_start][x_start + index] == '.' || letters_temp[y_start][x_start + index] == char(word[index])) {
@@ -125,15 +125,15 @@ void Board::place_word(std::string word, int x_start, int y_start,
     if (error == false) {
         letters = letters_temp;
 
-        /*Hier müssen die plazierten Wörter Überprüft werden */
+        /*Hier mÃ¼ssen die plazierten WÃ¶rter ÃœberprÃ¼ft werden */
 
-        /* Hier muss Überprüft werden, ob Player p die nötigen Steine besitzt */
+        /* Hier muss ÃœberprÃ¼ft werden, ob Player p die nÃ¶tigen Steine besitzt */
 
         /* Hier muss der Score richtig berechnet werden */
 
 
 
-        /* Anfang von Score-Funktion: (man könnte eine eigene Method sogar machen */
+        /* Anfang von Score-Funktion: (man kÃ¶nnte eine eigene Method sogar machen */
         int points = 0;
         int multiplier = 1;
 
@@ -153,10 +153,10 @@ void Board::place_word(std::string word, int x_start, int y_start,
             else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
                 value = 4;
             }
-            else if (word[i]=='Ä' || word[i]=='J' || word[i]=='Ü' || word[i]=='V') {
+            else if (word[i]=='Ã„' || word[i]=='J' || word[i]=='Ãœ' || word[i]=='V') {
                 value = 6;
             }
-            else if (word[i]=='Ö' || word[i]=='X') {
+            else if (word[i]=='Ã–' || word[i]=='X') {
                 value = 8;
             }
             else if (word[i]=='Q' || word[i]=='Y') {
@@ -166,11 +166,11 @@ void Board::place_word(std::string word, int x_start, int y_start,
                 value = 0;
             }
             else {
-                value = 0;  /*Hier vllt Errormessage hinzufügen. Alternativ kann man solche Fehler im vorraus beheben */
+                value = 0;  /*Hier vllt Errormessage hinzufÃ¼gen. Alternativ kann man solche Fehler im vorraus beheben */
             }
 
-            /* Falls wir auf einem "Buchstabenwert x3" Feld sind, muss das hier noch hinzugefügt werden!! */
-            /* Das Feld muss auf Wort-Multiplier geprüft werden!! */
+            /* Falls wir auf einem "Buchstabenwert x3" Feld sind, muss das hier noch hinzugefÃ¼gt werden!! */
+            /* Das Feld muss auf Wort-Multiplier geprÃ¼ft werden!! */
 
             points += value;
         }
@@ -184,7 +184,7 @@ void Board::place_word(std::string word, int x_start, int y_start,
 
 
         /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
-        /* Disese Steine müssen aus ziehbare_steine entfernt werden */
+        /* Disese Steine mÃ¼ssen aus ziehbare_steine entfernt werden */
         for (int i = 0; i < word.length(); i++) {
             player->stein_setzen(word[i]);
         }
