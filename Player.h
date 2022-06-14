@@ -20,7 +20,11 @@ class Player{
 
         void add_to_score(int);
 
+        char* get_steine();
+
         int get_score();
+
+        void display();
 
     private:
         int score;
