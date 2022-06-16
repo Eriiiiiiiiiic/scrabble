@@ -1,90 +1,127 @@
 #include "./Board.h"
 #include "./Player.h"
-#include "./setcolor.h"
+#include "./color.h"
+
+using namespace std;
 
 
 // ____________________________________________________________________________
 Board::Board() {
     for (int row = 1; row < 21; row ++) {
-        std::vector<char> temp_vec(20,'.');
+        vector<char> temp_vec(20,'.');
         letters.push_back(temp_vec);
     }
     ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
-                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÃ„JÃœVÃ–XQY&& */
-
+                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÜVÖXQY&& */
 }
 
 // ____________________________________________________________________________
 void Board::display() {
     /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
-    std::string bonusfelder = "400100040001004"
-                              "030002000200030"
-                              "003000101000300"
-                              "100300010003001"
-                              "000030000030000"
-                              "020002000200020"
-                              "001000101000100"
-                              "400100030001004"
-                              "001000101000100"
-                              "020002000200020"
-                              "000030000030000"
-                              "100300010003001"
-                              "003000101000300"
-                              "030002000200030"
-                              "400100040001004";
+    string bonusfelder = "400100040001004"
+                         "030002000200030"
+                         "003000101000300"
+                         "100300010003001"
+                         "000030000030000"
+                         "020002000200020"
+                         "001000101000100"
+                         "400100030001004"
+                         "001000101000100"
+                         "020002000200020"
+                         "000030000030000"
+                         "100300010003001"
+                         "003000101000300"
+                         "030002000200030"
+                         "400100040001004";
 
-    std::cout << "\n\n";
+    cout << "\n\n";
 
-    std::cout << "     a  b  c  d  e  f  g  h  i  j  k  l  m  n  o \n";
-    std::cout << "   .---------------------------------------------.\n";
+    cout << "     a  b  c  d  e  f  g  h  i  j  k  l  m  n  o \n";
+    cout << "   .---------------------------------------------.\n";
 
 
     int feldindex = 0;
     for (int row = 1; row <= 15; row ++) {
 
         if (row <10) {
-            std::cout << std::to_string(row) << "  |";
+            cout << to_string(row) << "  |";
         }
         else {
-            std::cout << std::to_string(row) << " |";
+            cout << to_string(row) << " |";
         }
 
         for (int col = 1; col <= 15; col ++) {
             /* Stelle die Bonusfelder farblich dar. */
-            if (bonusfelder[feldindex] == '1') {
-                setcolor( 0x30 );
+            string textfeld = "  ";
+            textfeld.insert(1,1,letters[row][col]);
+            if (bonusfelder[feldindex] == '0') {
+                color("white", textfeld);
+            } else if (bonusfelder[feldindex] == '1') {
+                color("light_blue", textfeld);
             } else if (bonusfelder[feldindex] == '2') {
-                setcolor( 0x17 );
+                color("blue", textfeld);
             } else if (bonusfelder[feldindex] == '3') {
-                setcolor( 0x60 );
+                color("yellow", textfeld);
             } else if (bonusfelder[feldindex] == '4') {
-                setcolor( 0x47 );
+                color("red", textfeld);
             }
-
-            std::cout << " " << letters[row][col] << " ";
-            setcolor( 0x07 );
             feldindex++;
         }
-        std::cout << "|\n";
+        if (row == 1) {
+            cout << "|\t";
+            color("light_blue", " . ");
+            cout << " doppelter Buchstabenwert\n";
+        } else if (row == 2) {
+            cout << "|\t";
+            color("blue", " . ");
+            cout << " dreifacher Buchstabenwert\n";
+        } else if (row == 3) {
+            cout << "|\t";
+            color("yellow", " . ");
+            cout << " doppelter Wortwert\n";
+        } else if (row == 4) {
+            cout << "|\t";
+            color("red", " . ");
+            cout << " dreifacher Wortwert\n";
+        } else if (row == 6) {
+            cout << "|\t1 Punkt: E, N, S, I, R, T, U, A, D\n";
+        } else if (row == 7) {
+            cout << "|\t2 Punkte: H, G, L, O\n";
+        } else if (row == 8) {
+            cout << "|\t3 Punkte: M, B, W, Z\n";
+        } else if (row == 9) {
+            cout << "|\t4 Punkte: C, F, K, P\n";
+        } else if (row == 10) {
+            cout << "|\t6 Punkte: Ä, J, Ü, V\n";
+        } else if (row == 11) {
+            cout << "|\t8 Punkte: Ö, X\n";
+        } else if (row == 12) {
+            cout << "|\t10 Punkte: Q, Y\n";
+        } else if (row == 13) {
+            cout << "|\t0 Punkte: &\n";
+        } else {
+            cout << "|\n";
+        }
+
     }
-    std::cout << "   '---------------------------------------------'\n";
-    std::cout << "\n\n";
+    cout << "   '---------------------------------------------'\n";
+    cout << "\n\n";
 }
 
 // ____________________________________________________________________________
-void Board::place_word(std::string word, int x_start, int y_start,
-                       std::string direction, Player* player) {
+void Board::place_word(string word, int x_start, int y_start,
+                       string direction, Player* player) {
 
-    std::vector<std::vector<char>> letters_temp = letters;
+    vector<vector<char>> letters_temp = letters;
 
     bool error = false;
 
-    /* Das Wort muss hier vllt in GroÃŸbuchstaben umgewandelt werden */
+    /* Das Wort muss hier vllt in Großbuchstaben umgewandelt werden */
     for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu GroÃŸbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /*ÃœberprÃ¼fe ob es ein kleinbuchstabe ist */
+        /* Mit ASCII einen 32 bit Shift zu Großbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /*Überprüfe ob es ein kleinbuchstabe ist */
         {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu GroÃŸbuchstaben */
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Großbuchstaben */
         }
     }
 
@@ -102,7 +139,7 @@ void Board::place_word(std::string word, int x_start, int y_start,
         }
         else{
             error = true;
-            std::cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
         }
     }
     if (direction == "h") {
@@ -119,21 +156,21 @@ void Board::place_word(std::string word, int x_start, int y_start,
         }
         else {
             error = true;
-            std::cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
         }
     }
     if (error == false) {
         letters = letters_temp;
 
-        /*Hier mÃ¼ssen die plazierten WÃ¶rter ÃœberprÃ¼ft werden */
+        /*Hier müssen die plazierten Wörter Überprüft werden */
 
-        /* Hier muss ÃœberprÃ¼ft werden, ob Player p die nÃ¶tigen Steine besitzt */
+        /* Hier muss Überprüft werden, ob Player p die nötigen Steine besitzt */
 
         /* Hier muss der Score richtig berechnet werden */
 
 
 
-        /* Anfang von Score-Funktion: (man kÃ¶nnte eine eigene Method sogar machen */
+        /* Anfang von Score-Funktion: (man könnte eine eigene Method sogar machen */
         int points = 0;
         int multiplier = 1;
 
@@ -153,10 +190,10 @@ void Board::place_word(std::string word, int x_start, int y_start,
             else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
                 value = 4;
             }
-            else if (word[i]=='Ã„' || word[i]=='J' || word[i]=='Ãœ' || word[i]=='V') {
+            else if (word[i]=='Ä' || word[i]=='J' || word[i]=='Ü' || word[i]=='V') {
                 value = 6;
             }
-            else if (word[i]=='Ã–' || word[i]=='X') {
+            else if (word[i]=='Ö' || word[i]=='X') {
                 value = 8;
             }
             else if (word[i]=='Q' || word[i]=='Y') {
@@ -166,11 +203,11 @@ void Board::place_word(std::string word, int x_start, int y_start,
                 value = 0;
             }
             else {
-                value = 0;  /*Hier vllt Errormessage hinzufÃ¼gen. Alternativ kann man solche Fehler im vorraus beheben */
+                value = 0;  /*Hier vllt Errormessage hinzufügen. Alternativ kann man solche Fehler im vorraus beheben */
             }
 
-            /* Falls wir auf einem "Buchstabenwert x3" Feld sind, muss das hier noch hinzugefÃ¼gt werden!! */
-            /* Das Feld muss auf Wort-Multiplier geprÃ¼ft werden!! */
+            /* Falls wir auf einem "Buchstabenwert x3" Feld sind, muss das hier noch hinzugefügt werden!! */
+            /* Das Feld muss auf Wort-Multiplier geprüft werden!! */
 
             points += value;
         }
@@ -184,7 +221,7 @@ void Board::place_word(std::string word, int x_start, int y_start,
 
 
         /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
-        /* Disese Steine mÃ¼ssen aus ziehbare_steine entfernt werden */
+        /* Disese Steine müssen aus ziehbare_steine entfernt werden */
         for (int i = 0; i < word.length(); i++) {
             player->stein_setzen(word[i]);
         }

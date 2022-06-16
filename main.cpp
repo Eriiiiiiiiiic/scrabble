@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include "./Board.h"
 #include "./Player.h"
-#include "./setcolor.h"
 
 using namespace std;
 
@@ -19,8 +18,6 @@ int main() {
 
     (&p1)->steine_ziehen(&brett);
     (&p2)->steine_ziehen(&brett);
-
-    setcolor( 0x07 );  // Initial color for program
 
     for(int i=0; i <= 10; i++){  /* Das abbruchskriterium ist noch nicht ganz richtig */
         int x = 0;
@@ -79,4 +76,3 @@ int main() {
 
     return 0;
 }
-

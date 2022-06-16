@@ -1,24 +1,22 @@
 #include "./Player.h"
 #include "./Board.h"
 
+using namespace std;
+
 
 // ____________________________________________________________________________
 Player::Player() {
     score = 0;
-    stein[0] = ' ';
-    stein[1] = ' ';
-    stein[2] = ' ';
-    stein[3] = ' ';
-    stein[4] = ' ';
-    stein[5] = ' ';
-    stein[6] = ' ';
+    for (int i = 0; i <= 6; i++) {
+        stein[i] = ' ';
+    }
 }
 
 // ____________________________________________________________________________
 void Player::steine_ziehen(Board* board) {
     for (int i = 0; i <= 6; i++) {
         if(stein[i] == ' ' && board->ziehbare_steine.length()!= 0) {  /*&& board->ziehbare_steine.length()!= 0  WICHTIG FEHLT */
-            int r = rand() % board->ziehbare_steine.length();      /* ZufÃ¤llige Zahl von 0 bis zur Anzahl an Steinen -1*/
+            int r = rand() % board->ziehbare_steine.length();      /* Zufällige Zahl von 0 bis zur Anzahl an Steinen -1*/
             stein[i] = char(board->ziehbare_steine[r]);
             board->ziehbare_steine.erase(r,1);
             /* Hier muss ein neuer Stein aus der Menge der Ziehbaren Steine gezogen weerden.
@@ -54,6 +52,9 @@ char* Player::get_steine() {
 
 
 void Player::display(){
-    std::cout <<"\n ~~~~~~=" << stein[0] << stein[1] << stein[2] << stein[3] << stein[4] << stein[5] << stein[6] << "=~~~~~~ \n\n" ;
+    cout << "\n ~~~~~~=";
+    for (int i = 0; i <= 6; i++) {
+        cout << stein[i];
+    }
+    cout << "=~~~~~~ \n\n" ;
 }
-
