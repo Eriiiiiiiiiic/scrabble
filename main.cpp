@@ -26,20 +26,29 @@ int main() {
         string direction = "";
 
         if(i%2 == 0){
-            cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
-            brett.display();
-            p1.display();
+            while (true) {
+                cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
+                brett.display();
+                p1.display();
 
-            cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-            cin >> x;
-            cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-            cin >> y;
+                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
+                cin >> x;
+                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
+                cin >> y;
 
-            cout << "Was ist dein Wort?:\n";
-            cin >> word;
+                cout << "Was ist dein Wort?:\n";
+                cin >> word;
 
-            cout << "Vertikal oder Horizontal?(v,h):\n";
-            cin >> direction;
+                cout << "Vertikal oder Horizontal?(v,h):\n";
+                cin >> direction;
+
+                if (p1.wort_setzen(word)) {
+                    break;
+                } else {
+                    cout << "Dein Wort lässt sich nicht mit den gegebenen Buchstaben setzen. ";
+                    cout << "Versuche ein anderes Wort.\n";
+                }
+            }
 
             brett.place_word(word,x,y,direction,&p1);
             cout << "Spieler 1 hat gespielt!\n\n";
@@ -49,21 +58,29 @@ int main() {
             cout << "\n\n\n";
         }
         else{
-            cout << "Spieler 2 ist am Zug! Hier das aktuelle Brett:\n";
-            brett.display();
-            p2.display();
+            while (true) {
+                cout << "Spieler 2 ist am Zug! Hier das aktuelle Brett:\n";
+                brett.display();
+                p2.display();
 
-            cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-            cin >> x;
-            cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-            cin >> y;
+                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
+                cin >> x;
+                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
+                cin >> y;
 
-            cout << "Was ist dein Wort?:\n";
-            cin >> word;
+                cout << "Was ist dein Wort?:\n";
+                cin >> word;
 
-            cout << "Vertikal oder Horizontal?(v,h):\n";
-            cin >> direction;
+                cout << "Vertikal oder Horizontal?(v,h):\n";
+                cin >> direction;
 
+                if (p2.wort_setzen(word)) {
+                    break;
+                } else {
+                    cout << "Dein Wort lässt sich nicht mit den gegebenen Buchstaben setzen. ";
+                    cout << "Versuche ein anderes Wort.\n";
+                }
+            }
 
             brett.place_word(word,x,y,direction,&p2);
             cout << "Spieler 2 hat gespielt!\n\n";
