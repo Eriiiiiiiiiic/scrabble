@@ -12,7 +12,7 @@ Board::Board() {
         letters.push_back(temp_vec);
     }
 //    ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
-//                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÜVÖXQY&& */
+//                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* Pï¿½Jï¿½Vï¿½XQY&& */
     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
                       "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&"; /* Englische Verteilung */
 }
@@ -118,12 +118,12 @@ void Board::place_word(string word, int x_start, int y_start,
 
     bool error = false;
 
-    /* Das Wort muss hier vllt in Großbuchstaben umgewandelt werden */
+    /* Das Wort muss hier vllt in Groï¿½buchstaben umgewandelt werden */
     for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu Großbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /*Überprüfe ob es ein kleinbuchstabe ist */
+        /* Mit ASCII einen 32 bit Shift zu Groï¿½buchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /*ï¿½berprï¿½fe ob es ein kleinbuchstabe ist */
         {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu Großbuchstaben */
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Groï¿½buchstaben */
         }
     }
 
@@ -161,18 +161,53 @@ void Board::place_word(string word, int x_start, int y_start,
             cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
         }
     }
-    if (error == false) {
+
+    /* Das Wort muss hier  in kleinbuchstaben fÃ¼r dictionary umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
+        if (word[i]>='A' && word[i]<='Z')  //Test ob es ein schon kleinbuchstabe ist */
+        {
+            word[i] = word[i] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
+        }
+    }
+
+    //Ist es ein Wort?
+    bool gefunden = false;
+    string file_word; // Ein Speicherplatz fÃ¼r die WÃ¶rter im dicitionary
+    ifstream fin;
+    fin.open("dictionary.txt",ios::in); //Ã¶ffnet die Datei zum lesen
+    while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
+	 	fin>>file_word;       //Neues Wort aus der Datei erhalten.
+	 	if(file_word == word){gefunden = true;} //Hier wÃ¤re ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
+        else if(file_word > word){break;}
+	}
+    if(gefunden){cout<<"Das wort existiert\n";}
+    if(!gefunden){cout<<"DAS WORT WURDE NICHT GEFUNDEN\n";}
+
+
+    /* Das Wort muss hier vllt in Groï¿½buchstaben umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu Groï¿½buchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /*ï¿½berprï¿½fe ob es ein kleinbuchstabe ist */
+        {
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Groï¿½buchstaben */
+        }
+    }
+	//WÃ¤re gut dem Spieler zu sagen, dass es kein Wort ist
+
+
+    if (error == false && gefunden) {
         letters = letters_temp;
 
-        /*Hier müssen die plazierten Wörter Überprüft werden */
+        /*Hier mï¿½ssen die plazierten Wï¿½rter ï¿½berprï¿½ft werden */
 
-        /* Hier muss Überprüft werden, ob Player p die nötigen Steine besitzt */
+        /* Hier muss ï¿½berprï¿½ft werden, ob Player p die nï¿½tigen Steine besitzt */
 
         /* Hier muss der Score richtig berechnet werden */
 
 
 
-        /* Anfang von Score-Funktion: (man könnte eine eigene Method sogar machen */
+        /* Anfang von Score-Funktion: (man kï¿½nnte eine eigene Method sogar machen */
         int points = 0;
         int multiplier = 1;
 
@@ -209,10 +244,10 @@ void Board::place_word(string word, int x_start, int y_start,
             else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
                 value = 4;
             }
-            else if (word[i]=='Ä' || word[i]=='J' || word[i]=='Ü' || word[i]=='V') {
+            else if (word[i]=='ï¿½' || word[i]=='J' || word[i]=='ï¿½' || word[i]=='V') {
                 value = 6;
             }
-            else if (word[i]=='Ö' || word[i]=='X') {
+            else if (word[i]=='ï¿½' || word[i]=='X') {
                 value = 8;
             }
             else if (word[i]=='Q' || word[i]=='Y') {
@@ -222,7 +257,7 @@ void Board::place_word(string word, int x_start, int y_start,
                 value = 0;
             }
             else {
-                value = 0;  /*Hier vllt Errormessage hinzufügen. Alternativ kann man solche Fehler im vorraus beheben */
+                value = 0;  /*Hier vllt Errormessage hinzufï¿½gen. Alternativ kann man solche Fehler im vorraus beheben */
             }
 
 
@@ -255,7 +290,7 @@ void Board::place_word(string word, int x_start, int y_start,
                     multiplier *= 3;
                 }
             }
-            /* Das Feld muss auf Wort-Multiplier geprüft werden!! */
+            /* Das Feld muss auf Wort-Multiplier geprï¿½ft werden!! */
 
             points += value;
         }
@@ -269,7 +304,7 @@ void Board::place_word(string word, int x_start, int y_start,
 
 
         /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
-        /* Disese Steine müssen aus ziehbare_steine entfernt werden */
+        /* Disese Steine mï¿½ssen aus ziehbare_steine entfernt werden */
         player->steine_ziehen(this);
     }
 }
