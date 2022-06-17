@@ -27,30 +27,39 @@ int main() {
 
         if(i%2 == 0){
             while (true) {
-                cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
-                brett.display();
-                p1.display();
+                try{
+                    cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
+                    brett.display();
+                    p1.display();
 
-                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-                cin >> x;
-                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-                cin >> y;
+                    cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
+                    cin >> x;
+                    cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
+                    cin >> y;
 
-                cout << "Was ist dein Wort?:\n";
-                cin >> word;
+                    cout << "Was ist dein Wort?:\n";
+                    cin >> word;
 
-                cout << "Vertikal oder Horizontal?(v,h):\n";
-                cin >> direction;
+                    cout << "Vertikal oder Horizontal?(v,h):\n";
+                    cin >> direction;
 
-                if (p1.wort_setzen(word)) {
-                    break;
-                } else {
-                    cout << "Dein Wort lässt sich nicht mit den gegebenen Buchstaben setzen. ";
+                    brett.place_word(word,x,y,direction,&p1); //hier kÃ¶nnen bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+
+                    if (p1.wort_setzen(word)) {
+                        break;
+                    }
+                    else {
+                    cout << "Dein Wort lï¿½sst sich nicht mit den gegebenen Buchstaben setzen. ";
+                    cout << "Versuche ein anderes Wort.\n";
+                    }
+                }
+                catch(...) {
+                    cout << "Deine Eingabe enthÃ¤lt einen Fehler/Problem. ";
                     cout << "Versuche ein anderes Wort.\n";
                 }
             }
 
-            brett.place_word(word,x,y,direction,&p1);
+
             cout << "Spieler 1 hat gespielt!\n\n";
             cout << "Er hat " << p1.get_score() << " Punkte!\n\n";
             cout << "Er zieht neue Steine:\n";
@@ -77,7 +86,7 @@ int main() {
                 if (p2.wort_setzen(word)) {
                     break;
                 } else {
-                    cout << "Dein Wort lässt sich nicht mit den gegebenen Buchstaben setzen. ";
+                    cout << "Dein Wort lï¿½sst sich nicht mit den gegebenen Buchstaben setzen. ";
                     cout << "Versuche ein anderes Wort.\n";
                 }
             }
