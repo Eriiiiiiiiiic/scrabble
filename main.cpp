@@ -20,44 +20,43 @@ int main() {
     (&p2)->steine_ziehen(&brett);
 
     for(int i=0; i <= 10; i++){  /* Das abbruchskriterium ist noch nicht ganz richtig */
+
         int x = 0;
         int y = 0;
         string word = "";
         string direction = "";
 
         if(i%2 == 0){
-            while (true) {
-                try{
-                    cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
-                    brett.display();
-                    p1.display();
+            markierung1:
+                cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
+                brett.display();
+                p1.display();
 
-                    cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-                    cin >> x;
-                    cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-                    cin >> y;
+                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
+                cin >> x;
+                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
+                cin >> y;
+                cout << "Was ist dein Wort?:\n";
+                cin >> word;
+                cout << "Vertikal oder Horizontal?(v,h):\n";
+                cin >> direction;
+                cout << "\n";
 
-                    cout << "Was ist dein Wort?:\n";
-                    cin >> word;
-
-                    cout << "Vertikal oder Horizontal?(v,h):\n";
-                    cin >> direction;
-
-                    brett.place_word(word,x,y,direction,&p1); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
-
-                    if (p1.wort_setzen(word)) {
-                        break;
+                if (brett.is_in_dict(word)) {
+                    if(p1.wort_setzen(word)){
+                        brett.place_word(word,x,y,direction,&p1); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
                     }
-                    else {
-                    cout << "Dein Wort l�sst sich nicht mit den gegebenen Buchstaben setzen. ";
-                    cout << "Versuche ein anderes Wort.\n";
+                    else{
+                        cout << "Dir fehlen die noetigen Steine!\n";
+                        cout << "Versuche ein anderes Wort.\n\n";
+                        goto markierung1;
                     }
                 }
-                catch(...) {
-                    cout << "Deine Eingabe enthält einen Fehler/Problem. ";
-                    cout << "Versuche ein anderes Wort.\n";
+                else {
+                cout << "Dein Wort ist fehlerhaft!\n";
+                cout << "Versuche ein anderes Wort.\n\n";
+                goto markierung1;
                 }
-            }
 
 
             cout << "Spieler 1 hat gespielt!\n\n";
@@ -67,7 +66,7 @@ int main() {
             cout << "\n\n\n";
         }
         else{
-            while (true) {
+            markierung2:
                 cout << "Spieler 2 ist am Zug! Hier das aktuelle Brett:\n";
                 brett.display();
                 p2.display();
@@ -83,15 +82,24 @@ int main() {
                 cout << "Vertikal oder Horizontal?(v,h):\n";
                 cin >> direction;
 
-                if (p2.wort_setzen(word)) {
-                    break;
-                } else {
-                    cout << "Dein Wort l�sst sich nicht mit den gegebenen Buchstaben setzen. ";
-                    cout << "Versuche ein anderes Wort.\n";
-                }
-            }
 
-            brett.place_word(word,x,y,direction,&p2);
+                if (brett.is_in_dict(word)) {
+                    if(p2.wort_setzen(word)){
+                        brett.place_word(word,x,y,direction,&p2); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+                    }
+                    else{
+                        cout << "Dir fehlen die noetigen Steine!\n";
+                        cout << "Versuche ein anderes Wort.\n";
+                        goto markierung2;
+                    }
+                }
+                else {
+                cout << "Dein Wort ist fehlerhaft!\n";
+                cout << "Versuche ein anderes Wort.\n";
+                goto markierung2;
+                }
+
+
             cout << "Spieler 2 hat gespielt!\n\n";
             cout << "Er hat " << p2.get_score() << " Punkte!\n\n";
             cout << "Er zieht neue Steine:\n";
