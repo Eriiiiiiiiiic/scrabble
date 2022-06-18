@@ -23,6 +23,8 @@ class Board{
 
         void display();
 
+        bool is_in_dict(string);
+
         void place_word(string, int, int, string, Player*);
 };
 
