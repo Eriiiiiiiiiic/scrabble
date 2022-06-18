@@ -21,8 +21,8 @@ class Player{
         void stein_setzen(char);
 
         // Falls gegebenes Wort setzbar ist, werden die Buchstaben des Worts
-        // aus 'stein' und 'steine_lst' entfernt und true wird zurückgegeben.
-        // Falls nicht, wird false zurückgegeben
+        // aus 'stein' und 'steine_lst' entfernt und true wird zurï¿½ckgegeben.
+        // Falls nicht, wird false zurï¿½ckgegeben
         bool wort_setzen(string);
 
         void add_to_score(int);
