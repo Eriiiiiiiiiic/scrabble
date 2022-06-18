@@ -110,6 +110,27 @@ void Board::display() {
     cout << "\n\n";
 }
 
+bool Board::is_in_dict(string word){
+    /* Das Wort muss hier  in kleinbuchstaben für dictionary umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
+        if (word[i]>='A' && word[i]<='Z'){  //Test ob es ein schon kleinbuchstabe ist */
+            word[i] = word[i] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
+        }
+    }
+    //Ist es ein Wort?
+    bool gefunden = false;
+    string file_word; // Ein Speicherplatz für die Wörter im dicitionary
+    ifstream fin;
+    fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
+    while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
+	 	fin>>file_word;       //Neues Wort aus der Datei erhalten.
+	 	if(file_word == word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
+        else if(file_word > word){break;}
+	}
+	return gefunden;
+}
+
 // ____________________________________________________________________________
 void Board::place_word(string word, int x_start, int y_start,
                        string direction, Player* player) {
@@ -162,149 +183,115 @@ void Board::place_word(string word, int x_start, int y_start,
         }
     }
 
-    /* Das Wort muss hier  in kleinbuchstaben für dictionary umgewandelt werden */
-    for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
-        if (word[i]>='A' && word[i]<='Z')  //Test ob es ein schon kleinbuchstabe ist */
-        {
-            word[i] = word[i] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
+
+
+    letters = letters_temp;
+
+    /*Hier m�ssen die plazierten W�rter �berpr�ft werden */
+
+    /* Hier muss �berpr�ft werden, ob Player p die n�tigen Steine besitzt */
+
+    /* Hier muss der Score richtig berechnet werden */
+
+
+
+    /* Anfang von Score-Funktion: (man k�nnte eine eigene Method sogar machen */
+    int points = 0;
+    int multiplier = 1;
+
+    /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
+    string bonusfelder = "400100040001004"
+                         "030002000200030"
+                         "003000101000300"
+                         "100300010003001"
+                         "000030000030000"
+                         "020002000200020"
+                         "001000101000100"
+                         "400100030001004"
+                         "001000101000100"
+                         "020002000200020"
+                         "000030000030000"
+                         "100300010003001"
+                         "003000101000300"
+                         "030002000200030"
+                         "400100040001004";
+
+    for (int i = 0; i < word.length(); i++) {
+
+        int value = 0;
+
+        if (word[i]=='E' || word[i]=='N' || word[i]=='S' || word[i]=='I' || word[i]=='R' || word[i]=='T' || word[i]=='U' || word[i]=='A' || word[i]=='D') {
+            value = 1;
         }
-    }
-
-    //Ist es ein Wort?
-    bool gefunden = false;
-    string file_word; // Ein Speicherplatz für die Wörter im dicitionary
-    ifstream fin;
-    fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
-    while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
-	 	fin>>file_word;       //Neues Wort aus der Datei erhalten.
-	 	if(file_word == word){gefunden = true;} //Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
-        else if(file_word > word){break;}
-	}
-    if(gefunden){cout<<"Das wort existiert\n";}
-    if(!gefunden){cout<<"DAS WORT WURDE NICHT GEFUNDEN\n";}
-
-
-    /* Das Wort muss hier vllt in Gro�buchstaben umgewandelt werden */
-    for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu Gro�buchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /*�berpr�fe ob es ein kleinbuchstabe ist */
-        {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu Gro�buchstaben */
+        else if (word[i]=='H' || word[i]=='G' || word[i]=='L' || word[i]=='O') {
+            value = 2;
         }
-    }
-	//Wäre gut dem Spieler zu sagen, dass es kein Wort ist
-
-
-    if (error == false && gefunden) {
-        letters = letters_temp;
-
-        /*Hier m�ssen die plazierten W�rter �berpr�ft werden */
-
-        /* Hier muss �berpr�ft werden, ob Player p die n�tigen Steine besitzt */
-
-        /* Hier muss der Score richtig berechnet werden */
-
-
-
-        /* Anfang von Score-Funktion: (man k�nnte eine eigene Method sogar machen */
-        int points = 0;
-        int multiplier = 1;
-
-        /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
-        string bonusfelder = "400100040001004"
-                             "030002000200030"
-                             "003000101000300"
-                             "100300010003001"
-                             "000030000030000"
-                             "020002000200020"
-                             "001000101000100"
-                             "400100030001004"
-                             "001000101000100"
-                             "020002000200020"
-                             "000030000030000"
-                             "100300010003001"
-                             "003000101000300"
-                             "030002000200030"
-                             "400100040001004";
-
-        for (int i = 0; i < word.length(); i++) {
-
-            int value = 0;
-
-            if (word[i]=='E' || word[i]=='N' || word[i]=='S' || word[i]=='I' || word[i]=='R' || word[i]=='T' || word[i]=='U' || word[i]=='A' || word[i]=='D') {
-                value = 1;
-            }
-            else if (word[i]=='H' || word[i]=='G' || word[i]=='L' || word[i]=='O') {
-                value = 2;
-            }
-            else if (word[i]=='M' || word[i]=='B' || word[i]=='W' || word[i]=='Z') {
-                value = 3;
-            }
-            else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
-                value = 4;
-            }
-            else if (word[i]=='�' || word[i]=='J' || word[i]=='�' || word[i]=='V') {
-                value = 6;
-            }
-            else if (word[i]=='�' || word[i]=='X') {
-                value = 8;
-            }
-            else if (word[i]=='Q' || word[i]=='Y') {
-                value = 10;
-            }
-            else if (word[i]=='&') {
-                value = 0;
-            }
-            else {
-                value = 0;  /*Hier vllt Errormessage hinzuf�gen. Alternativ kann man solche Fehler im vorraus beheben */
-            }
-
-
-            if(direction=="v"){
-                if(bonusfelder[(y_start+i)*15 + x_start - 16] == '1'){
-                    value *= 2;
-                }
-                else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '2'){
-                    value *= 3;
-                }
-                else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '3'){
-                    multiplier *= 2;
-                }
-                else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '4'){
-                    multiplier *= 3;
-                }
-            }
-            else if(direction=="h"){
-                if(bonusfelder[y_start*15 + x_start + i - 16] == '1'){
-                    value *= 2;
-                }
-                else if(bonusfelder[y_start*15 + x_start + i - 16] == '2'){
-                    cout << "mal 3";
-                    value *= 3;
-                }
-                else if(bonusfelder[y_start*15 + x_start + i - 16] == '3'){
-                    multiplier *= 2;
-                }
-                else if(bonusfelder[y_start*15 + x_start + i - 16] == '4'){
-                    multiplier *= 3;
-                }
-            }
-            /* Das Feld muss auf Wort-Multiplier gepr�ft werden!! */
-
-            points += value;
+        else if (word[i]=='M' || word[i]=='B' || word[i]=='W' || word[i]=='Z') {
+            value = 3;
+        }
+        else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
+            value = 4;
+        }
+        else if (word[i]=='�' || word[i]=='J' || word[i]=='�' || word[i]=='V') {
+            value = 6;
+        }
+        else if (word[i]=='�' || word[i]=='X') {
+            value = 8;
+        }
+        else if (word[i]=='Q' || word[i]=='Y') {
+            value = 10;
+        }
+        else if (word[i]=='&') {
+            value = 0;
+        }
+        else {
+            value = 0;  /*Hier vllt Errormessage hinzuf�gen. Alternativ kann man solche Fehler im vorraus beheben */
         }
 
 
-        player->add_to_score(multiplier * points);
+        if(direction=="v"){
+            if(bonusfelder[(y_start+i)*15 + x_start - 16] == '1'){
+                value *= 2;
+            }
+            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '2'){
+                value *= 3;
+            }
+            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '3'){
+                multiplier *= 2;
+            }
+            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '4'){
+                multiplier *= 3;
+            }
+        }
+        else if(direction=="h"){
+            if(bonusfelder[y_start*15 + x_start + i - 16] == '1'){
+                value *= 2;
+            }
+            else if(bonusfelder[y_start*15 + x_start + i - 16] == '2'){
+                cout << "mal 3";
+                value *= 3;
+            }
+            else if(bonusfelder[y_start*15 + x_start + i - 16] == '3'){
+                multiplier *= 2;
+            }
+            else if(bonusfelder[y_start*15 + x_start + i - 16] == '4'){
+                multiplier *= 3;
+            }
+        }
+        /* Das Feld muss auf Wort-Multiplier gepr�ft werden!! */
 
-
-
-
-
-
-        /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
-        /* Disese Steine m�ssen aus ziehbare_steine entfernt werden */
-        player->steine_ziehen(this);
+        points += value;
     }
+
+
+    player->add_to_score(multiplier * points);
+
+
+
+
+
+
+    /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
+    player->steine_ziehen(this);
+
 }
