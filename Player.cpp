@@ -20,7 +20,7 @@ Player::Player() {
 void Player::steine_ziehen(Board* board) {
     for (int i = 0; i <= 6; i++) {
         if (num_steine < 7  && board->ziehbare_steine.length() != 0) {
-            int r = rand() % board->ziehbare_steine.length();      /* Zufällige Zahl von 0 bis zur Anzahl an Steinen -1*/
+            int r = rand() % board->ziehbare_steine.length();      /* Zufï¿½llige Zahl von 0 bis zur Anzahl an Steinen -1*/
             int index = int(board->ziehbare_steine[r]) - 65;
             if (index == -27) index = 26;
             steine_lst[index]++;
@@ -69,7 +69,7 @@ bool Player::wort_setzen(string word) {
         if (index == -27) index = 26;
         word_lst[index]++;
     }
-    // Überprüfe, ob gegebenes Wort buchstabierbar ist.
+    // ï¿½berprï¿½fe, ob gegebenes Wort buchstabierbar ist.
     bool word_is_spellable = true;
     for (int i = 0; i < 27; i++) {
         if (steine_lst[i] < word_lst[i]) {
