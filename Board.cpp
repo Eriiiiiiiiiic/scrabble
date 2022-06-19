@@ -110,25 +110,137 @@ void Board::display() {
     cout << "\n\n";
 }
 
-bool Board::is_in_dict(string word){
-    /* Das Wort muss hier  in kleinbuchstaben für dictionary umgewandelt werden */
-    for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
-        if (word[i]>='A' && word[i]<='Z'){  //Test ob es ein schon kleinbuchstabe ist */
-            word[i] = word[i] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
+bool Board::is_in_dict(string word, int x_start, int y_start,string direction){
+
+    vector<vector<char>> letters_temp = letters;
+
+    if (direction == "v") {
+        if (word.length() + y_start <= 15 && y_start >= 0) {
+            for (int index = 0; index < word.length(); index++) {
+                if (letters_temp[y_start + index][x_start] == '.' || letters_temp[y_start + index][x_start] == char(word[index])) {
+                    letters_temp[y_start + index][x_start] = char(word[index]);
+                }
+                else {
+                    cout << "Sie versuchen etwas zu überschreiben!\n";
+                    return false;
+                }
+            }
+        }
+        else{
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
+            return false;
         }
     }
-    //Ist es ein Wort?
-    bool gefunden = false;
-    string file_word; // Ein Speicherplatz für die Wörter im dicitionary
-    ifstream fin;
-    fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
-    while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
-	 	fin>>file_word;       //Neues Wort aus der Datei erhalten.
-	 	if(file_word == word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
-        else if(file_word > word){break;}
-	}
-	return gefunden;
+    if (direction == "h") {
+        if (word.length() + x_start <= 15 && x_start >= 0) {
+            for (int index = 0; index < word.length(); index++) {
+                if (letters_temp[y_start][x_start + index] == '.' || letters_temp[y_start][x_start + index] == char(word[index])) {
+                    letters_temp[y_start][x_start + index] = char(word[index]);
+                }
+                else {
+                    cout << "Sie versuchen etwas zu überschreiben!\n";
+                    return false;
+                }
+            }
+        }
+        else {
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
+            return false;
+        }
+    }
+
+
+
+
+
+
+    /* Alle Buchstaben muessen hier in kleinbuchstaben für dictionary umgewandelt werden */
+    for (int x = 0; x < 15; x++){
+        for (int y = 0; y < 15; y++){
+        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
+            if (letters_temp[y][x]>='A' && letters_temp[y][x]<='Z'){  //Test ob es ein schon kleinbuchstabe ist */
+                letters_temp[y][x] = letters_temp[y][x] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
+            }
+        }
+    }
+
+    //hier wird vertikal geprüft
+    for(int x = 0; x < 15; x++){
+        string current_word = "";
+        bool gefunden = false;
+
+        for(int y = 0; y < 15; y++){
+            cout << "1";
+            if(letters_temp[y][x]!='.'){
+                current_word += letters_temp[y][x];
+                cout << "current_word: " <<current_word << endl;
+            }
+            else{
+                if(y!=0){
+                    if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
+                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                            cout << "ganzes Wort: " <<current_word << endl;
+                            //Jetzt liegt ein String/Block vor
+                            //Ist es ein Wort?
+                            bool gefunden = false;
+                            string file_word; // Ein Speicherplatz für die Wörter im dicitionary
+                            ifstream fin;
+                            fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
+                            while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
+                                fin>>file_word;       //Neues Wort aus der Datei erhalten.
+                                if(file_word == current_word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
+                                else if(file_word > current_word){return false;} //in Diesem Fall ist das Wort nicht existent, also meldet es einen Fehler.
+                            }
+                            cout << "Es ist im Wörterbuch!"<< endl;
+                        }
+                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                    }
+                }
+            }
+        }
+    }
+
+    cout << "\n\n"
+
+    //hier wird horizontal geprüft
+    for(int y = 0; y < 15; y++){
+        string current_word = "";
+        bool gefunden = false;
+
+        for(int x = 0; x < 15; x++){
+            cout << "1";
+            if(letters_temp[y][x]!='.'){
+                current_word += letters_temp[y][x];
+                cout << "current_word: " <<current_word << endl;
+            }
+            else{
+                if(x!=0){
+                    if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
+                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                            cout << "ganzes Wort: " <<current_word << endl;
+                            //Jetzt liegt ein String/Block vor
+                            //Ist es ein Wort?
+                            bool gefunden = false;
+                            string file_word; // Ein Speicherplatz für die Wörter im dicitionary
+                            ifstream fin;
+                            fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
+                            while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
+                                fin>>file_word;       //Neues Wort aus der Datei erhalten.
+                                if(file_word == current_word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
+                                else if(file_word > current_word){return false;} //in Diesem Fall ist das Wort nicht existent, also meldet es einen Fehler.
+                            }
+                            cout << "Es ist im Wörterbuch!"<< endl;
+                        }
+                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                    }
+                }
+            }
+        }
+    }
+
+
+    cout << "Es ist alles im Wörterbuch!\n";
+    return true;
 }
 
 // ____________________________________________________________________________
