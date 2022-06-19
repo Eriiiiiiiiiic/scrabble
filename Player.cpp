@@ -20,7 +20,7 @@ Player::Player() {
 void Player::steine_ziehen(Board* board) {
     for (int i = 0; i <= 6; i++) {
         if (num_steine < 7  && board->ziehbare_steine.length() != 0) {
-            int r = rand() % board->ziehbare_steine.length();      /* Zufällige Zahl von 0 bis zur Anzahl an Steinen -1*/
+            int r = rand() % board->ziehbare_steine.length();      /* Zufaellige Zahl von 0 bis zur Anzahl an Steinen -1*/
             int index = int(board->ziehbare_steine[r]) - 65;
             if (index == -27) index = 26;
             steine_lst[index]++;
@@ -62,21 +62,30 @@ void Player::stein_setzen(char letter) {
 
 // ____________________________________________________________________________
 bool Player::wort_setzen(string word) {
+    /* Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /* Ueberpruefe ob es ein kleinbuchstabe ist */
+        {
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Grossbuchstaben */
+        }
+    }
+
     int wordlength = word.length();
     int word_lst [27] = { };
     for (int i = 0; i < wordlength; i++) {
         int index = int(word[i]) - 65;
         word_lst[index]++;
     }
-    // Überprüfe, ob gegebenes Wort buchstabierbar ist.
-    int difference = 0;  // Zählt die anzahl an benötigten Jokern.
+    // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
+    int difference = 0;  // Zaehlt die anzahl an benoetigten Jokern.
     for (int i = 0; i < 26; i++) {
         if (steine_lst[i] < word_lst[i]) {
             difference += word_lst[i] - steine_lst[i];
             word_lst[i] -= word_lst[i] - steine_lst[i];
             if (difference > steine_lst[26]) {
                 // Es sind nicht genug Joker da, um das Wort doch noch
-                // Buchstabieren zu können.
+                // Buchstabieren zu koennen.
                 return false;
             }
         }
