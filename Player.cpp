@@ -62,6 +62,15 @@ void Player::stein_setzen(char letter) {
 
 // ____________________________________________________________________________
 bool Player::wort_setzen(string word) {
+    /* Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /* Ueberpruefe ob es ein kleinbuchstabe ist */
+        {
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Grossbuchstaben */
+        }
+    }
+
     int wordlength = word.length();
     int word_lst [27] = { };
     for (int i = 0; i < wordlength; i++) {
@@ -69,7 +78,7 @@ bool Player::wort_setzen(string word) {
         if (index == -27) index = 26;
         word_lst[index]++;
     }
-    // �berpr�fe, ob gegebenes Wort buchstabierbar ist.
+    // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
     bool word_is_spellable = true;
     for (int i = 0; i < 27; i++) {
         if (steine_lst[i] < word_lst[i]) {
