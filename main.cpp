@@ -52,6 +52,10 @@ int main() {
                 cin >> word;
                 cout << "Vertikal oder Horizontal?(v,h): ";
                 cin >> direction;
+                if (!(direction == "v" || direction == "h")) {
+                    cout << "Bitte gib eine gueltige Richtung an.\n";
+                    goto markierung1;
+                }
                 cout << "\n";
 
                 if (brett.is_in_dict(word)) {
@@ -104,7 +108,11 @@ int main() {
 
                 cout << "Vertikal oder Horizontal?(v,h): ";
                 cin >> direction;
-
+                if (!(direction == "v" || direction == "h")) {
+                    cout << "Bitte gib eine gueltige Richtung an.\n";
+                    goto markierung2;
+                }
+                cout << "\n";
 
                 if (brett.is_in_dict(word)) {
                     if(p2.wort_setzen(word)){
