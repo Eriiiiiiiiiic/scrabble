@@ -19,7 +19,7 @@ int main() {
     (&p1)->steine_ziehen(&brett);
     (&p2)->steine_ziehen(&brett);
 
-    for(int i=0; i <= 10; i++){  /* Das abbruchskriterium ist noch nicht ganz richtig */
+    for(int i=0; i <= 10; i++){  /* Das Abbruchskriterium ist noch nicht ganz richtig */
 
         int x = 0;
         int y = 0;
@@ -32,19 +32,31 @@ int main() {
                 brett.display();
                 p1.display();
 
-                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-                cin >> x;
-                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-                cin >> y;
-                cout << "Was ist dein Wort?:\n";
+                cout << "Wo soll dein Wort beginnen? (x Koordinate): ";
+                if (!(cin >> x) || x < 1 || x > 15) {  // möglicherweise falsche Eingabe abfangen
+                    cout << "Bitte gib die x Koordinate als ganze Zahl zwischen 1 und 15 an.\n";
+                    cin.clear();  // Fehlermeldungen löschen
+                    cin.sync();  // falsche Eingabe entfernen
+                    goto markierung1;
+                }
+
+                cout << "Wo soll dein Wort beginnen? (y Koordinate): ";
+                if (!(cin >> y) || y < 1 || y > 15) {  // möglicherweise falsche Eingabe abfangen
+                    cout << "Bitte gib die y Koordinate als ganze Zahl zwischen 1 und 15 an.\n";
+                    cin.clear();  // Fehlermeldungen löschen
+                    cin.sync();  // falsche Eingabe entfernen
+                    goto markierung1;
+                }
+
+                cout << "Was ist dein Wort?: ";
                 cin >> word;
-                cout << "Vertikal oder Horizontal?(v,h):\n";
+                cout << "Vertikal oder Horizontal?(v,h): ";
                 cin >> direction;
                 cout << "\n";
 
                 if (brett.is_in_dict(word)) {
                     if(p1.wort_setzen(word)){
-                        brett.place_word(word,x,y,direction,&p1); //hier kÃ¶nnen bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+                        brett.place_word(word,x,y,direction,&p1); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
                     }
                     else{
                         cout << "Dir fehlen die noetigen Steine!\n";
@@ -71,21 +83,32 @@ int main() {
                 brett.display();
                 p2.display();
 
-                cout << "Wo soll dein Wort beginnen? (x Koordinate):\n";
-                cin >> x;
-                cout << "Wo soll dein Wort beginnen? (y Koordinate):\n";
-                cin >> y;
+                cout << "Wo soll dein Wort beginnen? (x Koordinate): ";
+                if (!(cin >> x) || x < 1 || x > 15) {  // möglicherweise falsche Eingabe abfangen
+                    cout << "Bitte gib die x Koordinate als ganze Zahl zwischen 1 und 15 an.\n";
+                    cin.clear();  // Fehlermeldungen löschen
+                    cin.sync();  // falsche Eingabe entfernen
+                    goto markierung2;
+                }
 
-                cout << "Was ist dein Wort?:\n";
+                cout << "Wo soll dein Wort beginnen? (y Koordinate): ";
+                if (!(cin >> y) || y < 1 || y > 15) {  // möglicherweise falsche Eingabe abfangen
+                    cout << "Bitte gib die y Koordinate als ganze Zahl zwischen 1 und 15 an.\n";
+                    cin.clear();  // Fehlermeldungen löschen
+                    cin.sync();  // falsche Eingabe entfernen
+                    goto markierung2;
+                }
+
+                cout << "Was ist dein Wort?: ";
                 cin >> word;
 
-                cout << "Vertikal oder Horizontal?(v,h):\n";
+                cout << "Vertikal oder Horizontal?(v,h): ";
                 cin >> direction;
 
 
                 if (brett.is_in_dict(word)) {
                     if(p2.wort_setzen(word)){
-                        brett.place_word(word,x,y,direction,&p2); //hier kÃ¶nnen bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+                        brett.place_word(word,x,y,direction,&p2); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
                     }
                     else{
                         cout << "Dir fehlen die noetigen Steine!\n";
