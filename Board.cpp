@@ -1,6 +1,7 @@
 #include "./Board.h"
 #include "./Player.h"
 #include "./color.h"
+#include "./finden.h"
 
 using namespace std;
 
@@ -72,34 +73,36 @@ void Board::display() {
         if (row == 1) {
             cout << "|\t";
             color("light_blue", " . ");
-            cout << " doppelter Buchstabenwert\n";
+            cout << " x2 Buchstabenwert\n";
         } else if (row == 2) {
             cout << "|\t";
             color("blue", " . ");
-            cout << " dreifacher Buchstabenwert\n";
+            cout << " x3 Buchstabenwert\n";
         } else if (row == 3) {
             cout << "|\t";
             color("yellow", " . ");
-            cout << " doppelter Wortwert\n";
+            cout << " x2 Wortwert\n";
         } else if (row == 4) {
             cout << "|\t";
             color("red", " . ");
-            cout << " dreifacher Wortwert\n";
+            cout << " x3 Wortwert\n";
         } else if (row == 6) {
-            cout << "|\t1 Punkt:   E,A,I,O,N,R,T,L,S,U\n";
+            cout << "|\t1 Punkt:   E,A,I,O,N,R,\n";
         } else if (row == 7) {
-            cout << "|\t2 Punkte:  D,G\n";
+            cout << "|\t           T,L,S,U\n";
         } else if (row == 8) {
-            cout << "|\t3 Punkte:  B,C,M,P\n";
+            cout << "|\t2 Punkte:  D,G\n";
         } else if (row == 9) {
-            cout << "|\t4 Punkte:  F,H,V,W,Y\n";
+            cout << "|\t3 Punkte:  B,C,M,P\n";
         } else if (row == 10) {
-            cout << "|\t5 Punkte:  K\n";
+            cout << "|\t4 Punkte:  F,H,V,W,Y\n";
         } else if (row == 11) {
-            cout << "|\t8 Punkte:  J,X\n";
+            cout << "|\t5 Punkte:  K\n";
         } else if (row == 12) {
-            cout << "|\t10 Punkte: Q,Z\n";
+            cout << "|\t8 Punkte:  J,X\n";
         } else if (row == 13) {
+            cout << "|\t10 Punkte: Q,Z\n";
+        } else if (row == 14) {
             cout << "|\t0 Punkte:  &\n";
         } else {
             cout << "|\n";
@@ -170,28 +173,20 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
         bool gefunden = false;
 
         for(int y = 0; y < 15; y++){
-            cout << "1";
             if(letters_temp[y][x]!='.'){
                 current_word += letters_temp[y][x];
-                cout << "current_word: " <<current_word << endl;
             }
             else{
                 if(y!=0){
                     if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
-                            cout << "ganzes Wort: " <<current_word << endl;
                             //Jetzt liegt ein String/Block vor
                             //Ist es ein Wort?
-                            bool gefunden = false;
-                            string file_word; // Ein Speicherplatz für die Woerter im dicitionary
-                            ifstream fin;
-                            fin.open("dictionary.txt",ios::in); //oeffnet die Datei zum lesen
-                            while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
-                                fin>>file_word;       //Neues Wort aus der Datei erhalten.
-                                if(file_word == current_word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
-                                else if(file_word > current_word){return false;} //in Diesem Fall ist das Wort nicht existent, also meldet es einen Fehler.
-                            }
-                            cout << "Es ist im Wörterbuch!"<< endl;
+                            bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
+
+                            if(!gefunden){return false;}
+
+
                         }
                         current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
                     }
@@ -208,28 +203,21 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
         bool gefunden = false;
 
         for(int x = 0; x < 15; x++){
-            cout << "1";
             if(letters_temp[y][x]!='.'){
                 current_word += letters_temp[y][x];
-                cout << "current_word: " <<current_word << endl;
             }
             else{
                 if(x!=0){
                     if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
-                            cout << "ganzes Wort: " <<current_word << endl;
                             //Jetzt liegt ein String/Block vor
                             //Ist es ein Wort?
-                            bool gefunden = false;
-                            string file_word; // Ein Speicherplatz für die Woerter im dicitionary
-                            ifstream fin;
-                            fin.open("dictionary.txt",ios::in); //oeffnet die Datei zum lesen
-                            while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
-                                fin>>file_word;       //Neues Wort aus der Datei erhalten.
-                                if(file_word == current_word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
-                                else if(file_word > current_word){return false;} //in Diesem Fall ist das Wort nicht existent, also meldet es einen Fehler.
-                            }
-                            cout << "Es ist im Wörterbuch!"<< endl;
+
+                            bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
+
+                            if(!gefunden){return false;}
+
+
                         }
                         current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
                     }

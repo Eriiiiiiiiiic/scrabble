@@ -44,14 +44,14 @@ int main() {
                     cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
                     cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
                     cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
-                    cout << "Beispiele: b7, f15, a3, o11\n";
+                    cout << "Beispiele: b7, f15, a3, o11\n\n\n";
                     goto markierung1;
                 }
                 if (x <= 0 || x >= 16 || y <= 0 || y >= 16) {
                     cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
                     cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
                     cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
-                    cout << "Beispiele: b7, f15, a3, o11\n";
+                    cout << "Beispiele: b7, f15, a3, o11\n\n\n";
                     goto markierung1;
                 }
 
@@ -68,7 +68,7 @@ int main() {
 
                 if (brett.is_in_dict(word, x, y, direction)) {
                     if(p1.wort_setzen(word)){
-                        brett.place_word(word,x,y,direction,&p1); //hier können bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+                        brett.place_word(word,x,y,direction,&p1); //hier kï¿½nnen bei schlechtem Input Fehler gethrowed werden und dann gecatched.
                     }
                     else{
                         cout << "Dir fehlen die noetigen Steine!\n";
@@ -106,14 +106,14 @@ int main() {
                     cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
                     cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
                     cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
-                    cout << "Beispiele: b7, f15, a3, o11\n";
+                    cout << "Beispiele: b7, f15, a3, o11\n\n\n";
                     goto markierung2;
                 }
                 if (x <= 0 || x >= 16 || y <= 0 || y >= 16) {
                     cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
                     cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
                     cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
-                    cout << "Beispiele: b7, f15, a3, o11\n";
+                    cout << "Beispiele: b7, f15, a3, o11\n\n\n";
                     goto markierung2;
                 }
 

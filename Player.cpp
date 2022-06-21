@@ -95,7 +95,6 @@ bool Player::wort_setzen(string word) {
     }
     steine_lst[26] -= difference;
     num_steine -= wordlength;
-    cout << "#steine = " << num_steine << endl;
     return true;
 }
 
