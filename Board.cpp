@@ -87,9 +87,9 @@ void Board::display() {
             color("red", " . ");
             cout << " x3 Wortwert\n";
         } else if (row == 6) {
-            cout << "|\t1 Punkt:   E,A,I,O,N,R,\n";
+            cout << "|\t1 Punkt:   E,A,I,O,N,\n";
         } else if (row == 7) {
-            cout << "|\t           T,L,S,U\n";
+            cout << "|\t           R,T,L,S,U\n";
         } else if (row == 8) {
             cout << "|\t2 Punkte:  D,G\n";
         } else if (row == 9) {
@@ -320,25 +320,25 @@ void Board::place_word(string word, int x_start, int y_start,
 
         int value = 0;
 
-        if (word[i]=='E' || word[i]=='N' || word[i]=='S' || word[i]=='I' || word[i]=='R' || word[i]=='T' || word[i]=='U' || word[i]=='A' || word[i]=='D') {
+        if (word[i]=='E' || word[i]=='A' || word[i]=='I' || word[i]=='O' || word[i]=='N' || word[i]=='R' || word[i]=='T' || word[i]=='L' || word[i]=='S' || word[i]=='U') {
             value = 1;
         }
-        else if (word[i]=='H' || word[i]=='G' || word[i]=='L' || word[i]=='O') {
+        else if (word[i]=='D' || word[i]=='G') {
             value = 2;
         }
-        else if (word[i]=='M' || word[i]=='B' || word[i]=='W' || word[i]=='Z') {
+        else if (word[i]=='B' || word[i]=='C' || word[i]=='M' || word[i]=='P') {
             value = 3;
         }
-        else if (word[i]=='C' || word[i]=='F' || word[i]=='K' || word[i]=='P') {
+        else if (word[i]=='F' || word[i]=='H' || word[i]=='V' || word[i]=='W' || word[i]=='Y') {
             value = 4;
         }
-        else if (word[i]=='�' || word[i]=='J' || word[i]=='�' || word[i]=='V') {
-            value = 6;
+        else if (word[i]=='K') {
+            value = 5;
         }
-        else if (word[i]=='�' || word[i]=='X') {
+        else if (word[i]=='J' || word[i]=='X') {
             value = 8;
         }
-        else if (word[i]=='Q' || word[i]=='Y') {
+        else if (word[i]=='Q' || word[i]=='Z') {
             value = 10;
         }
         else if (word[i]=='&') {
