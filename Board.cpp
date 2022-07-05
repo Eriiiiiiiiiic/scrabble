@@ -182,11 +182,10 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
                             //Jetzt liegt ein String/Block vor
                             //Ist es ein Wort?
-                            bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
 
-                            if(!gefunden){return false;}
+                            if(finden(current_word)){}
 
-
+                            else{return false;}
                         }
                         current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
                     }
@@ -213,11 +212,10 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
                             //Jetzt liegt ein String/Block vor
                             //Ist es ein Wort?
 
-                            bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
 
-                            if(!gefunden){return false;}
+                            if(finden(current_word)){}
 
-
+                            else{return false;}
                         }
                         current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
                     }
