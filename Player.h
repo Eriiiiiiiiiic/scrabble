@@ -21,9 +21,9 @@ class Player{
         void stein_setzen(char);
 
         // Falls gegebenes Wort setzbar ist, werden die Buchstaben des Worts
-        // aus 'stein' und 'steine_lst' entfernt und true wird zur�ckgegeben.
-        // Falls nicht, wird false zur�ckgegeben
-        bool wort_setzen(string);
+        // aus 'stein' und 'steine_lst' entfernt und true wird zurueckgegeben.
+        // Falls nicht, wird false zurueckgegeben
+        bool wort_setzen(Board*, string, int, int);
 
         void add_to_score(int);
 
@@ -31,6 +31,7 @@ class Player{
 
         int get_score();
 
+        // Steine ausgeben, die der Spieler zur Verfuegung hat.
         void display();
 
     private:

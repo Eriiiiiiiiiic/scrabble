@@ -8,9 +8,12 @@ using namespace std;
 
 // ____________________________________________________________________________
 Board::Board() {
-    for (int row = 1; row < 21; row ++) {
-        vector<char> temp_vec(20,'.');
+    round = 1;
+    for (int row = 0; row < 15; row ++) {
+        vector<char> temp_vec(15,'.');
         letters.push_back(temp_vec);
+        vector<bool> null_vec(15,0);
+        joker.push_back(null_vec);
     }
 //    ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
 //                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÖVÜXQY&& */
@@ -44,16 +47,16 @@ void Board::display() {
 
 
     int feldindex = 0;
-    for (int row = 1; row <= 15; row ++) {
+    for (int row = 0; row < 15; row ++) {
 
-        if (row <10) {
-            cout << to_string(row) << "  |";
+        if (row < 9) {
+            cout << to_string(row + 1) << "  |";
         }
         else {
-            cout << to_string(row) << " |";
+            cout << to_string(row + 1) << " |";
         }
 
-        for (int col = 1; col <= 15; col ++) {
+        for (int col = 0; col < 15; col ++) {
             /* Stelle die Bonusfelder farblich dar. */
             string textfeld = "  ";
             textfeld.insert(1,1,letters[row][col]);
@@ -70,39 +73,39 @@ void Board::display() {
             }
             feldindex++;
         }
-        if (row == 1) {
+        if (row == 0) {
             cout << "|\t";
             color("light_blue", " . ");
             cout << " x2 Buchstabenwert\n";
-        } else if (row == 2) {
+        } else if (row == 1) {
             cout << "|\t";
             color("blue", " . ");
             cout << " x3 Buchstabenwert\n";
-        } else if (row == 3) {
+        } else if (row == 2) {
             cout << "|\t";
             color("yellow", " . ");
             cout << " x2 Wortwert\n";
-        } else if (row == 4) {
+        } else if (row == 3) {
             cout << "|\t";
             color("red", " . ");
             cout << " x3 Wortwert\n";
-        } else if (row == 6) {
+        } else if (row == 5) {
             cout << "|\t1 Punkt:   E,A,I,O,N,\n";
-        } else if (row == 7) {
+        } else if (row == 6) {
             cout << "|\t           R,T,L,S,U\n";
-        } else if (row == 8) {
+        } else if (row == 7) {
             cout << "|\t2 Punkte:  D,G\n";
-        } else if (row == 9) {
+        } else if (row == 8) {
             cout << "|\t3 Punkte:  B,C,M,P\n";
-        } else if (row == 10) {
+        } else if (row == 9) {
             cout << "|\t4 Punkte:  F,H,V,W,Y\n";
-        } else if (row == 11) {
+        } else if (row == 10) {
             cout << "|\t5 Punkte:  K\n";
-        } else if (row == 12) {
+        } else if (row == 11) {
             cout << "|\t8 Punkte:  J,X\n";
-        } else if (row == 13) {
+        } else if (row == 12) {
             cout << "|\t10 Punkte: Q,Z\n";
-        } else if (row == 14) {
+        } else if (row == 13) {
             cout << "|\t0 Punkte:  &\n";
         } else {
             cout << "|\n";
@@ -113,15 +116,26 @@ void Board::display() {
     cout << "\n\n";
 }
 
-bool Board::is_in_dict(string word, int x_start, int y_start, string direction) {
+bool Board::move_is_valid(string word, int x_start, int y_start, string direction) {
 
     vector<vector<char>> letters_temp = letters;
 
+    for (int index = 0; index < word.length(); index++) {
+        /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
+        if (word[index]>='a' && word[index]<='z') {  //Test ob es ein schon Grossbuchstabe ist */
+                word[index] = word[index] - 32; /* Falls nein, transformiere zu Grossbuchstaben */
+        }
+    }
+
+    bool word_is_crossed = false;  // Das neu gesetzte Wort kreuzt ein bereits gelegtes Wort.
     if (direction == "v") {
         if (word.length() + y_start <= 15 && y_start >= 0) {
             for (int index = 0; index < word.length(); index++) {
-                if (letters_temp[y_start + index][x_start] == '.' || letters_temp[y_start + index][x_start] == char(word[index])) {
+                if (letters_temp[y_start + index][x_start] == '.') {
                     letters_temp[y_start + index][x_start] = char(word[index]);
+                }
+                else if (letters_temp[y_start + index][x_start] == char(word[index])) {
+                    word_is_crossed = true;
                 }
                 else {
                     cout << "Sie versuchen etwas zu überschreiben!\n";
@@ -130,15 +144,18 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
             }
         }
         else{
-            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
+            cout << "Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
             return false;
         }
     }
     if (direction == "h") {
         if (word.length() + x_start <= 15 && x_start >= 0) {
             for (int index = 0; index < word.length(); index++) {
-                if (letters_temp[y_start][x_start + index] == '.' || letters_temp[y_start][x_start + index] == char(word[index])) {
+                if (letters_temp[y_start][x_start + index] == '.') {
                     letters_temp[y_start][x_start + index] = char(word[index]);
+                }
+                else if (letters_temp[y_start][x_start + index] == char(word[index])) {
+                    word_is_crossed = true;
                 }
                 else {
                     cout << "Sie versuchen etwas zu überschreiben!\n";
@@ -147,9 +164,13 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
             }
         }
         else {
-            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
+            cout << "Das Wort ist zu lang oder die Anfangsposition unsinnig!\n";
             return false;
         }
+    }
+    if (!word_is_crossed && round > 1) {
+        cout << "Das Wort ist nicht mit bereits gelegten Woertern verbunden!\n";
+        return false;
     }
 
 
@@ -160,8 +181,8 @@ bool Board::is_in_dict(string word, int x_start, int y_start, string direction) 
     /* Alle Buchstaben muessen hier in kleinbuchstaben für dictionary umgewandelt werden */
     for (int x = 0; x < 15; x++){
         for (int y = 0; y < 15; y++){
-        /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
-        if (letters_temp[y][x]>='A' && letters_temp[y][x]<='Z'){  //Test ob es ein schon kleinbuchstabe ist */
+            /* Mit ASCII einen 32 bit Shift zu kleinbuchstaben machen. */
+            if (letters_temp[y][x]>='A' && letters_temp[y][x]<='Z'){  //Test ob es ein schon kleinbuchstabe ist */
                 letters_temp[y][x] = letters_temp[y][x] + 32; /* Falls nein, transformiere zu kleinbuchstaben */
             }
         }
@@ -350,30 +371,30 @@ void Board::place_word(string word, int x_start, int y_start,
 
 
         if(direction=="v"){
-            if(bonusfelder[(y_start+i)*15 + x_start - 16] == '1'){
+            if(bonusfelder[(y_start+i)*15 + x_start] == '1'){
                 value *= 2;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '2'){
+            else if(bonusfelder[(y_start+i)*15 + x_start] == '2'){
                 value *= 3;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '3'){
+            else if(bonusfelder[(y_start+i)*15 + x_start] == '3'){
                 multiplier *= 2;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start - 16] == '4'){
+            else if(bonusfelder[(y_start+i)*15 + x_start] == '4'){
                 multiplier *= 3;
             }
         }
         else if(direction=="h"){
-            if(bonusfelder[y_start*15 + x_start + i - 16] == '1'){
+            if(bonusfelder[y_start*15 + x_start + i] == '1'){
                 value *= 2;
             }
-            else if(bonusfelder[y_start*15 + x_start + i - 16] == '2'){
+            else if(bonusfelder[y_start*15 + x_start + i] == '2'){
                 value *= 3;
             }
-            else if(bonusfelder[y_start*15 + x_start + i - 16] == '3'){
+            else if(bonusfelder[y_start*15 + x_start + i] == '3'){
                 multiplier *= 2;
             }
-            else if(bonusfelder[y_start*15 + x_start + i - 16] == '4'){
+            else if(bonusfelder[y_start*15 + x_start + i] == '4'){
                 multiplier *= 3;
             }
         }

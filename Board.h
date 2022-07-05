@@ -16,14 +16,16 @@ class Player;
 class Board{
     public:
         vector<vector<char>> letters;
+        vector<vector<bool>> joker;
         string ziehbare_steine;
+        int round;
 
 
         Board();
 
         void display();
 
-        bool is_in_dict(string, int, int, string);
+        bool move_is_valid(string, int, int, string);
 
         void place_word(string, int, int, string, Player*);
 };

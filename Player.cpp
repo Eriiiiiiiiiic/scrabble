@@ -61,21 +61,23 @@ void Player::stein_setzen(char letter) {
 }
 
 // ____________________________________________________________________________
-bool Player::wort_setzen(string word) {
-    /* Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden */
-    for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /* Ueberpruefe ob es ein kleinbuchstabe ist */
-        {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu Grossbuchstaben */
-        }
-    }
+bool Player::wort_setzen(Board* board, string word, int x_start, int y_start) {
 
-    int wordlength = word.length();
+    int num_placed_steine = 0;  // Anzahl der gesetzten Steine.
     int word_lst [27] = { };
-    for (int i = 0; i < wordlength; i++) {
-        int index = int(word[i]) - 65;
-        word_lst[index]++;
+    /* Schreibe das Wort in die Listen Form.
+    Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden. */
+    for (int i = 0; i < word.length(); i++) {
+        /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /* Ueberpruefe ob es ein Grossbuchstabe ist */
+        {
+            word[i] = word[i] - 32;  /* Falls ja, transformiere zu Grossbuchstaben */
+        }
+        if (board->letters[y_start + i][x_start] == '.') {
+            int index = int(word[i]) - 65;
+            word_lst[index]++;
+            num_placed_steine++;
+        }
     }
     // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
     int difference = 0;  // Zaehlt die anzahl an benoetigten Jokern.
@@ -94,7 +96,7 @@ bool Player::wort_setzen(string word) {
         steine_lst[i] -= word_lst[i];
     }
     steine_lst[26] -= difference;
-    num_steine -= wordlength;
+    num_steine -= num_placed_steine;
     return true;
 }
 
