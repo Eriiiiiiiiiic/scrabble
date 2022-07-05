@@ -4,18 +4,41 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "./dict_to_vector.h"
 
 using namespace std;
 
-bool finden(string word) { // file muss 2^k Zeilen haben!
-    bool gefunden = false;
-    string file_word; // Ein Speicherplatz für die Wörter im dicitionary
-    ifstream fin;
-    fin.open("dictionary.txt",ios::in); //öffnet die Datei zum lesen
-    while(!fin.eof() && !gefunden){ //Solange man nicht am end-of-file ankommt oder es noch nicht gefunden hat, mache weiter.
-        fin>>file_word;       //Neues Wort aus der Datei erhalten.
-        if(file_word == word){gefunden = true;} //(Könnte mindestens in O(log_2(words)) gehen) Hier wäre ein lexikographischer Vergleich und die Ordnung im Lexikon interessant.
-        else if(file_word > word){cout << "just a tiny bit bigger: " << file_word << endl; return false;} //in Diesem Fall ist das Wort nicht existent, also meldet es einen Fehler.
+vector<string> dictionary = dict_vector();
+
+bool finden(int n0, int n, string word) { // file muss 2^k Zeilen haben!
+
+    int halflenght = n/2;
+    int middle = n0 + halflenght;
+
+    //dict_word bestimmen: an der stelle middle
+    string dict_word = dictionary[middle];
+
+    if(n==1){
+        return (dict_word == word);
+    }
+
+
+    if(middle <= 267752){
+
+        if(dict_word == word){
+            return true;
+        }
+        else if(dict_word < word){
+            return finden(middle,halflenght,word);
+        }
+        else{
+            return finden(n0,halflenght,word);
+        }
+
+    }
+    else{
+        return finden(n0,halflenght,word);
     }
 }
+
 #endif  // FINDEN_H_
