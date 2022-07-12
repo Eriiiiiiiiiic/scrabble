@@ -76,7 +76,14 @@ void Board::display() {
 
         for (int col = 0; col < 15; col ++) {
             /* Stelle die Bonusfelder farblich dar. */
+            if (row == 7 && col == 7 && letters[row][col] == '.') {
+                // Das mittlere Feld wird als ' # ' ausgegeben.
+                color("yellow", " # ");
+                feldindex++;
+                continue;
+            }
             string textfeld = "  ";
+            if (joker[row][col]) textfeld = "()";  // Joker werden ausgeklammert
             textfeld.insert(1,1,letters[row][col]);
             if (bonusfelder[feldindex] == '0') {
                 color("white", textfeld);
@@ -135,6 +142,20 @@ void Board::display() {
 }
 
 bool Board::move_is_valid(string word, int x_start, int y_start, string direction) {
+    // Pruefe ob das erste gelegte Wort durch das mittlere Feld verlaeuft.
+    if (round == 1) {
+        if (direction == "v") {
+            if (x_start != 7 || y_start > 7 || y_start + word.length() < 8) {
+                cout << "Das erste Wort muss durch das mittlere Feld verlaufen!\n";
+                return false;
+            }
+        } else if (direction == "h") {
+            if (y_start != 7 || x_start > 7 || x_start + word.length() < 8) {
+                cout << "Das erste Wort muss durch das mittlere Feld verlaufen!\n";
+                return false;
+            }
+        }
+    }
 
     vector<vector<char>> letters_temp = letters;
 
@@ -145,7 +166,7 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
         }
     }
 
-    bool word_is_crossed = false;  // Das neu gesetzte Wort kreuzt ein bereits gelegtes Wort.
+    bool word_is_adjacent = false;  // Das neu gesetzte Wort kreuzt ein bereits gelegtes Wort, oder liegt daran an.
     if (direction == "v") {
         if (word.length() + y_start <= 15 && y_start >= 0) {
             for (int index = 0; index < word.length(); index++) {
@@ -153,11 +174,24 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
                     letters_temp[y_start + index][x_start] = char(word[index]);
                 }
                 else if (letters_temp[y_start + index][x_start] == char(word[index])) {
-                    word_is_crossed = true;
+                    word_is_adjacent = true;
                 }
                 else {
                     cout << "Sie versuchen etwas zu überschreiben!\n";
                     return false;
+                }
+                // Teste, ob es benachbarte Worte gibt
+                if (!word_is_adjacent) {
+                    if (x_start < 14) {
+                        if (letters_temp[y_start + index][x_start + 1] != '.') {
+                            word_is_adjacent = true;
+                        }
+                    }
+                    if (x_start > 0) {
+                        if (letters_temp[y_start + index][x_start - 1] != '.') {
+                            word_is_adjacent = true;
+                        }
+                    }
                 }
             }
         }
@@ -173,11 +207,24 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
                     letters_temp[y_start][x_start + index] = char(word[index]);
                 }
                 else if (letters_temp[y_start][x_start + index] == char(word[index])) {
-                    word_is_crossed = true;
+                    word_is_adjacent = true;
                 }
                 else {
                     cout << "Sie versuchen etwas zu überschreiben!\n";
                     return false;
+                }
+                // Teste, ob es benachbarte Worte gibt
+                if (!word_is_adjacent) {
+                    if (y_start < 14) {
+                        if (letters_temp[y_start + 1][x_start + index] != '.') {
+                            word_is_adjacent = true;
+                        }
+                    }
+                    if (x_start > 0) {
+                        if (letters_temp[y_start - 1][x_start + index] != '.') {
+                            word_is_adjacent = true;
+                        }
+                    }
                 }
             }
         }
@@ -186,7 +233,8 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
             return false;
         }
     }
-    if (!word_is_crossed && round > 1) {
+    // Hat das gelegte Wort keine benachbarten Worte, so kann es nicht legal gelegt werden.
+    if (!word_is_adjacent && round > 1) {
         cout << "Das Wort ist nicht mit bereits gelegten Woertern verbunden!\n";
         return false;
     }
