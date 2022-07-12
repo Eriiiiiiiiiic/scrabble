@@ -36,7 +36,7 @@ Board::Board() {
 //    ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
 //                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÖVÜXQY&& */
     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
-                      "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&"; /* Englische Verteilung */
+                      "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"; /* Englische Verteilung */
 }
 
 // ____________________________________________________________________________
@@ -300,9 +300,6 @@ void Board::word_score(string word,int x_start, int y_start, string direction, P
         else if (word[i]=='Q' || word[i]=='Z') {
             value = 10;
         }
-        else if (word[i]=='&') {
-            value = 0;
-        }
         else {
             value = 0;  /*Hier vllt Errormessage hinzufügen. Alternativ kann man solche Fehler im vorraus beheben */
         }
@@ -336,8 +333,19 @@ void Board::word_score(string word,int x_start, int y_start, string direction, P
                 multiplier *= 3;
             }
         }
-        /* Das Feld muss auf Wort-Multiplier geprueft werden!! */
+
+        if(direction == "h"){
+            if(joker[y_start][x_start + i]){
+                value = 0;
+            }
+        }
+        if(direction == "v"){
+            if(joker[y_start+i][x_start]){
+                value = 0;
+            }
+        }
         points += value;
+        /* Das Feld muss auf Wort-Multiplier geprueft werden!! */
     }
     player-> add_to_score(multiplier * points);
 }
@@ -504,7 +512,6 @@ void Board::place_word(string word, int x_start, int y_start,
 
     if(direction == "v"){
         for(int i=0; i< word.length();i++){
-            cout << x_start + (y_start+i)*15 << endl;
             bonusfelder_for_points[x_start + (y_start+i)*15] = '0';
         }
     }
