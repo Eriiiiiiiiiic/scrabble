@@ -453,7 +453,6 @@ void Board::place_word(string word, int x_start, int y_start,
                                     break;
                                 }
                             }
-                            cout<< "contains:" << contains_new_letter << endl;
                             if(contains_new_letter == true){
                             //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
                                 word_score(current_word,x,y-current_word.length(),"v",player);
@@ -488,7 +487,6 @@ void Board::place_word(string word, int x_start, int y_start,
                                     contains_new_letter = true;
                                 }
                             }
-                            cout<< "contains:" << contains_new_letter << endl;
                             if(contains_new_letter == true){
                             //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
                                 word_score(current_word,x-current_word.length(),y,"h",player);
