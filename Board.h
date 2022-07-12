@@ -26,7 +26,7 @@ class Board{
         void display();
 
         bool move_is_valid(string, int, int, string);
-
+        void word_score(string, int, int, string, Player*);
         void place_word(string, int, int, string, Player*);
 };
 
