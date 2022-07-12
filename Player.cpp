@@ -61,7 +61,7 @@ void Player::stein_setzen(char letter) {
 }
 
 // ____________________________________________________________________________
-bool Player::wort_setzen(Board* board, string word, int x_start, int y_start) {
+bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, string direction) {
 
     int num_placed_steine = 0;  // Anzahl der gesetzten Steine.
     int word_lst [27] = { };
@@ -69,26 +69,54 @@ bool Player::wort_setzen(Board* board, string word, int x_start, int y_start) {
     Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden. */
     for (int i = 0; i < word.length(); i++) {
         /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /* Ueberpruefe ob es ein Grossbuchstabe ist */
-        {
+        if (word[i] >= 'a' && word[i] <= 'z') {  /* Ueberpruefe ob es ein Grossbuchstabe ist */
             word[i] = word[i] - 32;  /* Falls ja, transformiere zu Grossbuchstaben */
         }
-        if (board->letters[y_start + i][x_start] == '.') {
-            int index = int(word[i]) - 65;
-            word_lst[index]++;
-            num_placed_steine++;
+        if (direction == "h") {
+            if (board->letters[y_start][x_start + i] == '.') {
+                int index = int(word[i]) - 65;
+                word_lst[index]++;
+                num_placed_steine++;
+            }
+        } else if (direction == "v") {
+            if (board->letters[y_start + i][x_start] == '.') {
+                int index = int(word[i]) - 65;
+                word_lst[index]++;
+                num_placed_steine++;
+            }
         }
     }
+    int joker_lst [26] = { };
     // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
-    int difference = 0;  // Zaehlt die anzahl an benoetigten Jokern.
+    int difference = 0;  // Zaehlt die Anzahl an benoetigten Jokern.
     for (int i = 0; i < 26; i++) {
         if (steine_lst[i] < word_lst[i]) {
-            difference += word_lst[i] - steine_lst[i];
-            word_lst[i] -= word_lst[i] - steine_lst[i];
+            int wl_sl = word_lst[i] - steine_lst[i];
+            difference += wl_sl;
+            word_lst[i] -= wl_sl;
+            for (int j = 0; j < wl_sl; j++) {
+                joker_lst[i]++;
+            }
             if (difference > steine_lst[26]) {
                 // Es sind nicht genug Joker da, um das Wort doch noch
                 // Buchstabieren zu koennen.
                 return false;
+            }
+        }
+    }
+    if (difference > 0) {
+        for (int i = word.length() - 1; i >= 0; i--) {
+            int index = int(word[i]) - 65;
+            if (direction == "h") {
+                if (joker_lst[index] > 0 && board->letters[y_start][x_start + i] == '.') {
+                    joker_lst[index]--;
+                    board->joker[y_start][x_start + i] = true;
+                }
+            } else if (direction == "v") {
+                if (joker_lst[index] > 0 && board->letters[y_start + i][x_start] == '.') {
+                    joker_lst[index]--;
+                    board->joker[y_start + i][x_start] = true;
+                }
             }
         }
     }

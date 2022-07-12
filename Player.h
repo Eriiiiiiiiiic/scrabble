@@ -23,7 +23,7 @@ class Player{
         // Falls gegebenes Wort setzbar ist, werden die Buchstaben des Worts
         // aus 'stein' und 'steine_lst' entfernt und true wird zurueckgegeben.
         // Falls nicht, wird false zurueckgegeben
-        bool wort_setzen(Board*, string, int, int);
+        bool wort_setzen(Board*, string, int, int, string);
 
         void add_to_score(int);
 
