@@ -252,70 +252,12 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
     return true;
 }
 
-// ____________________________________________________________________________
-void Board::place_word(string word, int x_start, int y_start,
-                       string direction, Player* player) {
+void Board::word_score(string word,int x_start, int y_start, string direction, Player* player){
 
-    vector<vector<char>> letters_temp = letters;
-
-    bool error = false;
-
-    /* Das Wort muss hier vllt in Großbuchstaben umgewandelt werden */
-    for (int i = 0; i < word.length(); i++){
-        /* Mit ASCII einen 32 bit Shift zu Großbuchstaben machen. */
-        if (word[i]>='a' && word[i]<='z')  /*Ueberpruefe ob es ein kleinbuchstabe ist */
-        {
-            word[i] = word[i] - 32; /* Falls ja, transformiere zu Großbuchstaben */
-        }
-    }
-
-    if (direction == "v") {
-        if (word.length() + y_start <= 15 && y_start >= 0) {
-            for (int index = 0; index < word.length(); index++) {
-                if (letters_temp[y_start + index][x_start] == '.' || letters_temp[y_start + index][x_start] == char(word[index])) {
-                    letters_temp[y_start + index][x_start] = char(word[index]);
-                }
-                else {
-                    error = true;
-                    break;
-                }
-            }
-        }
-        else{
-            error = true;
-            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
-        }
-    }
-    if (direction == "h") {
-        if (word.length() + x_start <= 15 && x_start >= 0) {
-            for (int index = 0; index < word.length(); index++) {
-                if (letters_temp[y_start][x_start + index] == '.' || letters_temp[y_start][x_start + index] == char(word[index])) {
-                    letters_temp[y_start][x_start + index] = char(word[index]);
-                }
-                else {
-                    error = true;
-                    break;
-                }
-            }
-        }
-        else {
-            error = true;
-            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
-        }
-    }
-
-
-
-    letters = letters_temp;
-
-    /*Hier muessen die plazierten Wörter ueberprueft werden */
-
-    /* Hier muss ueberprueft werden, ob Player p die nötigen Steine besitzt */
-
-    /* Hier muss der Score richtig berechnet werden */
-
-
-
+    cout << word << endl;
+    cout << x_start << endl;
+    cout << y_start << endl;
+    cout << direction << endl;
     /* Anfang von Score-Funktion: (man koennte eine eigene Method sogar machen */
     int points = 0;
     int multiplier = 1;
@@ -337,8 +279,8 @@ void Board::place_word(string word, int x_start, int y_start,
                          "030002000200030"
                          "400100040001004";
 
-    for (int i = 0; i < word.length(); i++) {
 
+    for (int i = 0; i < word.length(); i++) {
         int value = 0;
 
         if (word[i]=='E' || word[i]=='A' || word[i]=='I' || word[i]=='O' || word[i]=='N' || word[i]=='R' || word[i]=='T' || word[i]=='L' || word[i]=='S' || word[i]=='U') {
@@ -399,12 +341,172 @@ void Board::place_word(string word, int x_start, int y_start,
             }
         }
         /* Das Feld muss auf Wort-Multiplier geprueft werden!! */
-
         points += value;
+    }
+    player-> add_to_score(multiplier * points);
+}
+
+// ____________________________________________________________________________
+void Board::place_word(string word, int x_start, int y_start,
+                       string direction, Player* player) {
+
+    /* String markiert wo auf dem Brett NEUE Buchstaben liegen werden: 0 heißt keine Veränderung, 1 heißt neuer Buchstabe. */
+    string changes =     "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000"
+                         "000000000000000";
+
+
+
+    vector<vector<char>> letters_temp = letters;
+
+    bool error = false;
+
+    /* Das Wort muss hier vllt in Großbuchstaben umgewandelt werden */
+    for (int i = 0; i < word.length(); i++){
+        /* Mit ASCII einen 32 bit Shift zu Großbuchstaben machen. */
+        if (word[i]>='a' && word[i]<='z')  /*Ueberpruefe ob es ein kleinbuchstabe ist */
+        {
+            word[i] = word[i] - 32; /* Falls ja, transformiere zu Großbuchstaben */
+        }
+    }
+
+    if (direction == "v") {
+        if (word.length() + y_start <= 15 && y_start >= 0) {
+            for (int index = 0; index < word.length(); index++) {
+                if (letters_temp[y_start + index][x_start] == '.' || letters_temp[y_start + index][x_start] == char(word[index])) {
+                    if(letters_temp[y_start + index][x_start] == '.'){
+                        changes[x_start+15*(y_start+index)] = '1'; //Für die Score function ist es nützlich zu wissen, was alles neu ist
+                    }
+
+                    letters_temp[y_start + index][x_start] = char(word[index]);
+                }
+                else {
+                    error = true;
+                    break;
+                }
+            }
+        }
+        else{
+            error = true;
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
+        }
+    }
+    if (direction == "h") {
+        if (word.length() + x_start <= 15 && x_start >= 0) {
+            for (int index = 0; index < word.length(); index++) {
+                if (letters_temp[y_start][x_start + index] == '.' || letters_temp[y_start][x_start + index] == char(word[index])) {
+                    if(letters_temp[y_start][x_start + index] == '.'){
+                        changes[x_start+index+15*y_start] = '1';//Für die Score function ist es nützlich zu wissen, was alles neu ist
+                    }
+                    letters_temp[y_start][x_start + index] = char(word[index]);
+                }
+                else {
+                    error = true;
+                    break;
+                }
+            }
+        }
+        else {
+            error = true;
+            cout << " Das Wort ist zu lang oder die Anfangsposition unsinnig.\n";
+        }
+    }
+
+    cout << changes << endl;
+
+    letters = letters_temp;
+
+    /*Hier muessen die plazierten Wörter ueberprueft werden */
+
+    /* Hier muss ueberprueft werden, ob Player p die nötigen Steine besitzt */
+
+    /* Hier muss der Score richtig berechnet werden */
+
+
+
+
+    //ALLE WÖRTER DURCHLAUFEN. FALLS EIN BUCHSTABE VOM NEUEN WORT KOMMT, BERECHNE SCORE.
+
+        //hier wird vertikal geprüft
+    for(int x = 0; x < 15; x++){
+        string current_word = "";
+
+        for(int y = 0; y < 15; y++){
+            if(letters[y][x]!='.'){
+                current_word += letters[y][x];
+            }
+            else{
+                if(y!=0){
+                    if(letters[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
+                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                            //Jetzt liegt ein String/Block vor
+                            bool contains_new_letter = false;
+                            for(int i=0; i< word.length();i++){
+                                if(changes[x+(y-current_word.length()  +  i)*15]=='1'){
+                                    contains_new_letter = true;
+                                    break;
+                                }
+                            }
+                            cout<< "contains:" << contains_new_letter << endl;
+                            if(contains_new_letter == true){
+                            //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                                word_score(current_word,x,y-current_word.length(),"v",player);
+                            }
+                        }
+                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                    }
+                }
+            }
+        }
     }
 
 
-    player->add_to_score(multiplier * points);
+
+
+    //hier wird horizontal geprüft
+    for(int y = 0; y < 15; y++){
+        string current_word = "";
+
+        for(int x = 0; x < 15; x++){
+            if(letters[y][x]!='.'){
+                current_word += letters[y][x];
+            }
+            else{
+                if(x!=0){
+                    if(letters[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
+                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                            //Jetzt liegt ein String/Block vor
+                            bool contains_new_letter = false;
+                            for(int i=0; i< word.length();i++){
+                                if(changes[x-current_word.length()  + i +  y*15]=='1'){
+                                    contains_new_letter = true;
+                                }
+                            }
+                            cout<< "contains:" << contains_new_letter << endl;
+                            if(contains_new_letter == true){
+                            //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                                word_score(current_word,x-current_word.length(),y,"h",player);
+                            }
+                        }
+                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                    }
+                }
+            }
+        }
+    }
+
 
 
 
