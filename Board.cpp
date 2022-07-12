@@ -15,6 +15,24 @@ Board::Board() {
         vector<bool> null_vec(15,0);
         joker.push_back(null_vec);
     }
+        /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
+
+        bonusfelder_for_points = "400100040001004"
+                         "030002000200030"
+                         "003000101000300"
+                         "100300010003001"
+                         "000030000030000"
+                         "020002000200020"
+                         "001000101000100"
+                         "400100030001004"
+                         "001000101000100"
+                         "020002000200020"
+                         "000030000030000"
+                         "100300010003001"
+                         "003000101000300"
+                         "030002000200030"
+                         "400100040001004";
+
 //    ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
 //                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÖVÜXQY&& */
     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
@@ -254,31 +272,9 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
 
 void Board::word_score(string word,int x_start, int y_start, string direction, Player* player){
 
-    cout << word << endl;
-    cout << x_start << endl;
-    cout << y_start << endl;
-    cout << direction << endl;
     /* Anfang von Score-Funktion: (man koennte eine eigene Method sogar machen */
     int points = 0;
     int multiplier = 1;
-
-    /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
-    string bonusfelder = "400100040001004"
-                         "030002000200030"
-                         "003000101000300"
-                         "100300010003001"
-                         "000030000030000"
-                         "020002000200020"
-                         "001000101000100"
-                         "400100030001004"
-                         "001000101000100"
-                         "020002000200020"
-                         "000030000030000"
-                         "100300010003001"
-                         "003000101000300"
-                         "030002000200030"
-                         "400100040001004";
-
 
     for (int i = 0; i < word.length(); i++) {
         int value = 0;
@@ -313,30 +309,30 @@ void Board::word_score(string word,int x_start, int y_start, string direction, P
 
 
         if(direction=="v"){
-            if(bonusfelder[(y_start+i)*15 + x_start] == '1'){
+            if(bonusfelder_for_points[(y_start+i)*15 + x_start] == '1'){
                 value *= 2;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start] == '2'){
+            else if(bonusfelder_for_points[(y_start+i)*15 + x_start] == '2'){
                 value *= 3;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start] == '3'){
+            else if(bonusfelder_for_points[(y_start+i)*15 + x_start] == '3'){
                 multiplier *= 2;
             }
-            else if(bonusfelder[(y_start+i)*15 + x_start] == '4'){
+            else if(bonusfelder_for_points[(y_start+i)*15 + x_start] == '4'){
                 multiplier *= 3;
             }
         }
         else if(direction=="h"){
-            if(bonusfelder[y_start*15 + x_start + i] == '1'){
+            if(bonusfelder_for_points[y_start*15 + x_start + i] == '1'){
                 value *= 2;
             }
-            else if(bonusfelder[y_start*15 + x_start + i] == '2'){
+            else if(bonusfelder_for_points[y_start*15 + x_start + i] == '2'){
                 value *= 3;
             }
-            else if(bonusfelder[y_start*15 + x_start + i] == '3'){
+            else if(bonusfelder_for_points[y_start*15 + x_start + i] == '3'){
                 multiplier *= 2;
             }
-            else if(bonusfelder[y_start*15 + x_start + i] == '4'){
+            else if(bonusfelder_for_points[y_start*15 + x_start + i] == '4'){
                 multiplier *= 3;
             }
         }
@@ -366,7 +362,6 @@ void Board::place_word(string word, int x_start, int y_start,
                          "000000000000000"
                          "000000000000000"
                          "000000000000000";
-
 
 
     vector<vector<char>> letters_temp = letters;
@@ -424,7 +419,6 @@ void Board::place_word(string word, int x_start, int y_start,
         }
     }
 
-    cout << changes << endl;
 
     letters = letters_temp;
 
@@ -453,7 +447,7 @@ void Board::place_word(string word, int x_start, int y_start,
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
                             //Jetzt liegt ein String/Block vor
                             bool contains_new_letter = false;
-                            for(int i=0; i< word.length();i++){
+                            for(int i=0; i< current_word.length();i++){
                                 if(changes[x+(y-current_word.length()  +  i)*15]=='1'){
                                     contains_new_letter = true;
                                     break;
@@ -489,7 +483,7 @@ void Board::place_word(string word, int x_start, int y_start,
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
                             //Jetzt liegt ein String/Block vor
                             bool contains_new_letter = false;
-                            for(int i=0; i< word.length();i++){
+                            for(int i=0; i< current_word.length();i++){
                                 if(changes[x-current_word.length()  + i +  y*15]=='1'){
                                     contains_new_letter = true;
                                 }
@@ -507,12 +501,20 @@ void Board::place_word(string word, int x_start, int y_start,
         }
     }
 
+    //Alle Bonusfelder die überdeckt sind vom neuen Wort müssen neutralisiert werden:
 
 
-
-
-
-
+    if(direction == "v"){
+        for(int i=0; i< word.length();i++){
+            cout << x_start + (y_start+i)*15 << endl;
+            bonusfelder_for_points[x_start + (y_start+i)*15] = '0';
+        }
+    }
+    if(direction == "h"){
+        for(int i=0; i< word.length();i++){
+            bonusfelder_for_points[x_start + i +  y_start*15] = '0';
+        }
+    }
     /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
     player->steine_ziehen(this);
 
