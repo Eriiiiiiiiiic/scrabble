@@ -19,7 +19,7 @@ class Board{
         vector<vector<bool>> joker;
         string ziehbare_steine;
         int round;
-
+        string bonusfelder_for_points;
 
         Board();
 
