@@ -16,6 +16,9 @@ class Player{
     public:
         Player();
 
+        // Spiele zieht neue Steine aus dem Vorrat an ziehbaren Steinen,
+        // bis er entweder wieder sieben Steine auf der Hand hat, oder bis
+        // keine ziehbaren Steine mehr uebrig sind.
         void steine_ziehen(Board*);
 
         void stein_setzen(char);
@@ -25,9 +28,13 @@ class Player{
         // Falls nicht, wird false zurueckgegeben
         bool wort_setzen(Board*, string, int, int, string);
 
+        bool steine_tauschen(Board*, string);
+
         void add_to_score(int);
 
-        char* get_steine();
+        int* get_steine_lst();
+
+        int get_num_steine();
 
         int get_score();
 
@@ -36,7 +43,7 @@ class Player{
 
     private:
         int score;
-        char stein[7];
+//        char stein[7];
         int steine_lst [27];
         int num_steine;
 };

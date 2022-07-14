@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <vector>
-#include <fstream>
 #include "./dict_to_vector.h"
 
 using namespace std;

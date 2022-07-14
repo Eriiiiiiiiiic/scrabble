@@ -18,7 +18,7 @@ class Board{
         vector<vector<char>> letters;
         vector<vector<bool>> joker;
         string ziehbare_steine;
-        int round;
+        bool first_word_placed;
         string bonusfelder_for_points;
 
         Board();
@@ -26,7 +26,14 @@ class Board{
         void display();
 
         bool move_is_valid(string, int, int, string);
+
         void word_score(string, int, int, string, Player*);
+
+        // Addiert den Wert aller Steine des Gegenspielers die dieser
+        // am Ende des Spiels noch uebrig hatte zu den Punkten des
+        // Spielers, der das Spiel beendet hat.
+        void final_letters_score(int*, Player*);
+
         void place_word(string, int, int, string, Player*);
 };
 

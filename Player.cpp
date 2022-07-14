@@ -7,9 +7,9 @@ using namespace std;
 // ____________________________________________________________________________
 Player::Player() {
     score = 0;
-    for (int i = 0; i <= 6; i++) {
-        stein[i] = ' ';
-    }
+//    for (int i = 0; i <= 6; i++) {
+//        stein[i] = ' ';
+//    }
     for (int i = 0; i < 27; i++) {
         steine_lst[i] = 0;
     }
@@ -18,7 +18,7 @@ Player::Player() {
 
 // ____________________________________________________________________________
 void Player::steine_ziehen(Board* board) {
-    for (int i = 0; i <= 6; i++) {
+    for (int i = 0; i < 7; i++) {
         if (num_steine < 7  && board->ziehbare_steine.length() != 0) {
             int r = rand() % board->ziehbare_steine.length();      /* Zufaellige Zahl von 0 bis zur Anzahl an Steinen -1*/
             int index = int(board->ziehbare_steine[r]) - 65;
@@ -31,34 +31,35 @@ void Player::steine_ziehen(Board* board) {
         } else {
             break;
         }
-        // Das Array stein muss noch angepasst werden.
-        int steinindex = 0;
-        for (int i = 0; i < 26; i++) {
-            for (int j = 0; j < steine_lst[i]; j++) {
-                stein[steinindex] = char(i + 65);
-                steinindex++;
-            }
-        }
-        for (int i = 0; i < steine_lst[26]; i++) {
-            stein[steinindex] = '&';
-            steinindex++;
-        }
+//        // Das Array stein muss noch angepasst werden.
+//        int steinindex = 0;
+//        for (int i = 0; i < 26; i++) {
+//            for (int j = 0; j < steine_lst[i]; j++) {
+//                stein[steinindex] = char(i + 65);
+//                steinindex++;
+//            }
+//        }
+//        for (int i = 0; i < steine_lst[26]; i++) {
+//            stein[steinindex] = '&';
+//            steinindex++;
+//        }
     }
 }
 
-// ____________________________________________________________________________
-void Player::stein_setzen(char letter) {
-    if (steine_lst[int(letter)] > 0) {
-        steine_lst[int(letter)]--;
-        num_steine--;
-    }
-    for (int i = 0; i <= 6; i++) {
-        if (stein[i] == letter) {
-            stein[i] = ' ';
-            break;
-        }
-    }
-}
+//// ____________________________________________________________________________
+//void Player::stein_setzen(char letter) {
+//    cout << "Huhu, hier bin ich!!!!!!!!!!!!\n";
+//    if (steine_lst[int(letter)] > 0) {
+//        steine_lst[int(letter)]--;
+//        num_steine--;
+//    }
+//    for (int i = 0; i < 7; i++) {
+//        if (stein[i] == letter) {
+//            stein[i] = ' ';
+//            break;
+//        }
+//    }
+//}
 
 // ____________________________________________________________________________
 bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, string direction) {
@@ -69,7 +70,7 @@ bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, st
     Das Wort muss hier vllt in Grossbuchstaben umgewandelt werden. */
     for (int i = 0; i < word.length(); i++) {
         /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
-        if (word[i] >= 'a' && word[i] <= 'z') {  /* Ueberpruefe ob es ein Grossbuchstabe ist */
+        if (word[i] >= 'a' && word[i] <= 'z') {  /* Ueberpruefe ob es ein Kleinbuchstabe ist */
             word[i] = word[i] - 32;  /* Falls ja, transformiere zu Grossbuchstaben */
         }
         if (direction == "h") {
@@ -129,6 +130,44 @@ bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, st
 }
 
 // ____________________________________________________________________________
+bool Player::steine_tauschen(Board* board, string letters) {
+    int swap_lst [27] = { };
+    /* Schreibe die Buchstaben in die Listen Form.
+    Kleinbuchstaben muessen vllt in Grossbuchstaben umgewandelt werden. */
+    for (int i = 0; i < letters.length(); i++) {
+        if (letters[i] >= 'a' && letters[i] <= 'z') {  /* Ueberpruefe ob es ein Kleinbuchstabe ist */
+            letters[i] = letters[i] - 32;  /* Mit ASCII einen 32 bit Shift zu Grossbuchstaben machen. */
+            swap_lst[int(letters[i]) - 65]++;
+        } else if (letters[i] >= 'A' && letters[i] <= 'Z') {  /* Ueberpruefe ob es ein Grossbuchstabe ist */
+            swap_lst[int(letters[i]) - 65]++;
+        } else if (letters[i] == '&') {  /* Ueberpruefe ob es ein Joker ist */
+            swap_lst[26]++;
+        } else {
+            // In diesem Fall war die Eingabe ungueltig.
+            return false;
+        }
+    }
+
+    // Pruefe ob der Spieler die zu tauschenden Steine ueberhaupt besitzt.
+    for (int i = 0; i < 27; i++) {
+        if (steine_lst[i] < swap_lst[i]) {
+            // In diesem Fall war die Eingabe ungueltig.
+            return false;
+        }
+    }
+
+    // Steine zuruecklegen und neue Steine ziehen.
+    for (int i = 0; i < 27; i++) steine_lst[i] -= swap_lst[i];
+    num_steine -= letters.length();
+    //cout << board->ziehbare_steine << " + " << letters << " = ";
+    board->ziehbare_steine += letters;
+    //cout << board->ziehbare_steine << endl;
+    steine_ziehen(board);
+
+    return true;
+}
+
+// ____________________________________________________________________________
 void Player::add_to_score(int n) {
     score += n;
 }
@@ -139,12 +178,17 @@ int Player::get_score() {
 }
 
 // ____________________________________________________________________________
-char* Player::get_steine() {
-    return stein;
+int* Player::get_steine_lst() {
+    return steine_lst;
 }
 
+// ____________________________________________________________________________
+int Player::get_num_steine() {
+    return num_steine;
+}
 
-void Player::display(){
+// ____________________________________________________________________________
+void Player::display() {
     cout << "\n ~~~~~~=";
 //    for (int i = 0; i <= 6; i++) {
 //        cout << stein[i];

@@ -18,6 +18,7 @@ void color(string color, string line, bool newLine = false) {
     else if (color == "blue") col = 159;
     else if (color == "yellow") col = 224;
     else if (color == "red") col = 207;
+    else if (color == "grey") col = 8;
 
     SetConsoleTextAttribute(hConsole, col);
     cout << line;
@@ -38,6 +39,7 @@ void color(string color, string line, bool newLine = false) {
     else if (color == "blue") col = "\033[0;44;37m";
     else if (color == "yellow") col = "\033[2;43;30m";
     else if (color == "red") col = "\033[2;41;37m";
+    else if (color == "grey") col = "\033[38;5;246m";
 
     cout << col << line << "\033[0m";
     if (newLine) {

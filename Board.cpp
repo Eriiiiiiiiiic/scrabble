@@ -8,7 +8,7 @@ using namespace std;
 
 // ____________________________________________________________________________
 Board::Board() {
-    round = 1;
+    first_word_placed = false;
     for (int row = 0; row < 15; row ++) {
         vector<char> temp_vec(15,'.');
         letters.push_back(temp_vec);
@@ -18,25 +18,24 @@ Board::Board() {
         /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
 
         bonusfelder_for_points = "400100040001004"
-                         "030002000200030"
-                         "003000101000300"
-                         "100300010003001"
-                         "000030000030000"
-                         "020002000200020"
-                         "001000101000100"
-                         "400100030001004"
-                         "001000101000100"
-                         "020002000200020"
-                         "000030000030000"
-                         "100300010003001"
-                         "003000101000300"
-                         "030002000200030"
-                         "400100040001004";
+                                 "030002000200030"
+                                 "003000101000300"
+                                 "100300010003001"
+                                 "000030000030000"
+                                 "020002000200020"
+                                 "001000101000100"
+                                 "400100030001004"
+                                 "001000101000100"
+                                 "020002000200020"
+                                 "000030000030000"
+                                 "100300010003001"
+                                 "003000101000300"
+                                 "030002000200030"
+                                 "400100040001004";
 
-//    ziehbare_steine = "EEEEEEEEEEEEEEENNNNNNNNNSSSSSSSIIIIIIRRRRRRTTTTTTUUUUUU"
-//                      "AAAAADDDDHHHHGGGLLLOOOMMMMBBWZCCFFKKPJVXQY&&"; /* PÄJÖVÜXQY&& */
-    ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
-                      "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"; /* Englische Verteilung */
+//    ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
+//                      "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&; /* Englische Verteilung */
+    ziehbare_steine = "EAIONR&&&&&&&&&&";
 }
 
 // ____________________________________________________________________________
@@ -141,9 +140,10 @@ void Board::display() {
     cout << "\n\n";
 }
 
+// ____________________________________________________________________________
 bool Board::move_is_valid(string word, int x_start, int y_start, string direction) {
     // Pruefe ob das erste gelegte Wort durch das mittlere Feld verlaeuft.
-    if (round == 1) {
+    if (!first_word_placed) {
         if (direction == "v") {
             if (x_start != 7 || y_start > 7 || y_start + word.length() < 8) {
                 cout << "Das erste Wort muss durch das mittlere Feld verlaufen!\n";
@@ -234,7 +234,7 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
         }
     }
     // Hat das gelegte Wort keine benachbarten Worte, so kann es nicht legal gelegt werden.
-    if (!word_is_adjacent && round > 1) {
+    if (!word_is_adjacent && first_word_placed) {
         cout << "Das Wort ist nicht mit bereits gelegten Woertern verbunden!\n";
         return false;
     }
@@ -318,9 +318,10 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
     return true;
 }
 
-void Board::word_score(string word,int x_start, int y_start, string direction, Player* player){
+// ____________________________________________________________________________
+void Board::word_score(string word, int x_start, int y_start, string direction, Player* player) {
 
-    /* Anfang von Score-Funktion: (man koennte eine eigene Method sogar machen */
+    /* Anfang von Score-Funktion: (man koennte sogar eine eigene Method machen */
     int points = 0;
     int multiplier = 1;
 
@@ -353,6 +354,7 @@ void Board::word_score(string word,int x_start, int y_start, string direction, P
         }
 
 
+        // Bonusfelder auswerten
         if(direction=="v"){
             if(bonusfelder_for_points[(y_start+i)*15 + x_start] == '1'){
                 value *= 2;
@@ -393,9 +395,55 @@ void Board::word_score(string word,int x_start, int y_start, string direction, P
             }
         }
         points += value;
-        /* Das Feld muss auf Wort-Multiplier geprueft werden!! */
     }
-    player-> add_to_score(multiplier * points);
+    player->add_to_score(multiplier * points);
+}
+
+// ____________________________________________________________________________
+void Board::final_letters_score(int* letters_lst, Player* p_final_move) {
+
+    int points = 0;
+    // Wert der gegebenen Buchstaben bestimmen.
+    for (int i = 0; i < 26; i++) {
+        if (letters_lst[i] > 0) {
+            char letter = char(i+65);
+            int n = letters_lst[i];
+            cout << "Letter " << letter << " *" << n;
+            if (letter=='E' || letter=='A' || letter=='I' || letter=='O' || letter=='N' ||
+                letter=='R' || letter=='T' || letter=='L' || letter=='S' || letter=='U') {
+                cout << "\t+" << 1*n << " Point(s)\n";
+                points += 1*n;
+            }
+            else if (letter=='D' || letter=='G') {
+                cout << "\t+" << 2*n << " Points\n";
+                points += 2*n;
+            }
+            else if (letter=='B' || letter=='C' || letter=='M' || letter=='P') {
+                cout << "\t+" << 3*n << " Points\n";
+                points += 3*n;
+            }
+            else if (letter=='F' || letter=='H' || letter=='V' || letter=='W' || letter=='Y') {
+                cout << "\t+" << 4*n << " Points\n";
+                points += 4*n;
+            }
+            else if (letter=='K') {
+                cout << "\t+" << 5*n << " Points\n";
+                points += 5*n;
+            }
+            else if (letter=='J' || letter=='X') {
+                cout << "\t+" << 8*n << " Points\n";
+                points += 8*n;
+            }
+            else if (letter=='Q' || letter=='Z') {
+                cout << "\t+" << 10*n << " Points\n";
+                points += 10*n;
+            } else {
+                cout << "\t+0 Points\n";
+            }
+        }
+    }
+    // Berechneten Wert zu den Punkten des letzten Spielers hinzufuegen.
+    p_final_move->add_to_score(points);
 }
 
 // ____________________________________________________________________________
