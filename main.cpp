@@ -18,8 +18,8 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     int start_score = p->get_score();
 
     markierung:
-    if (is_player1) cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
-    else cout << "Spieler 2 ist am Zug! Hier das aktuelle Brett:\n";
+    if (is_player1) cout << p->name << " ist am Zug! Hier das aktuelle Brett:\n";
+    else cout << p->name  << " ist am Zug! Hier das aktuelle Brett:\n";
     brett->display();
     p->display();
 
@@ -35,8 +35,8 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
             cout << "Moechtest du eine Runde aussetzen? (y/n): ";
             cin >> skip;
             if (skip == "y") {
-                if (is_player1) cout << "Spieler 1 setzt eine Runde aus.\n\n\n\n";
-                else cout << "Spieler 2 setzt eine Runde aus.\n\n\n\n";
+                if (is_player1) cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
+                else cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
                 return true;
             }
             goto markierung;
@@ -44,13 +44,13 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         cout << "Welche Steine moechtest du tauschen?: ";
         cin >> word;
         if (word == "*") {  // Zug aussetzen
-            if (is_player1) cout << "Spieler 1 setzt eine Runde aus.\n\n\n\n";
-            else cout << "Spieler 2 setzt eine Runde aus.\n\n\n\n";
+            if (is_player1) cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
+            else cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
             return true;
         }
         if (p->steine_tauschen(brett, word)) {
-            if (is_player1) cout << "Spieler 1 hat Steine weggelegt.\n";
-            else cout << "Spieler 2 hat Steine weggelegt.\n";
+            if (is_player1) cout << p->name  << " hat Steine weggelegt.\n";
+            else cout << p->name  << " hat Steine weggelegt.\n";
             cout << "Er zieht neue Steine:\n";
             p->display();
             cout << "\n\n\n";
@@ -118,11 +118,11 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         goto markierung;
     }
 
-    if (is_player1) cout << "Spieler 1 hat gespielt!\n\n";
-    else cout << "Spieler 2 hat gespielt!\n\n";
+    if (is_player1) cout << p->name  << " hat gespielt!\n\n";
+    else cout << p->name  << " hat gespielt!\n\n";
     if (brett->ziehbare_steine.length() == 0 && p->get_num_steine() == 0) { // Siegbedingung pruefen
-        if (is_player1) cout << "Spieler 1 hat keine Steine und kann keine Steine mehr ziehen. ";
-        else cout << "Spieler 2 hat keine Steine und kann keine Steine mehr ziehen. ";
+        if (is_player1) cout << p->name  << " hat keine Steine und kann keine Steine mehr ziehen. ";
+        else cout << p->name  << " hat keine Steine und kann keine Steine mehr ziehen. ";
         cout << "Damit ist das Spiel beendet!\n";
         cout << endl << "Hier ist das finale Brett:\n";
         brett->display();
@@ -140,6 +140,26 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
 }
 
 int main() {
+cout <<"\n"
+"\n"
+"   ______________________________________________________________ \n"
+" / \\                                                             \\.\n"
+"|   |                                                            |.\n"
+" \\_ |                              _     _     _                 |.\n"
+"    |                             | |   | |   | |                |.\n"
+"    |           ___  ___ _ __ __ _| |__ | |__ | | ___            |.\n"
+"    |          / __|/ __| '__/ _` | '_ \\| '_ \\| |/ _ \\           |.\n"
+"    |          \\__ \\ (__| | | (_| | |_) | |_) | |  __/           |.\n"
+"    |          |___/\\___|_|  \\__,_|_.__/|_.__/|_|\\___|           |.\n"
+"    |                                                            |.\n"
+"    |                                                            |.\n"
+"    |    ________________________________________________________|___\n"
+"    |  /                                                            /.\n"
+"    \\_/____________________________________________________________/.\n\n\n";
+
+
+
+
 
     srand(time(NULL));  // Random-Seed initalisieren
 
@@ -150,6 +170,19 @@ int main() {
     p1.steine_ziehen(&brett);
     p2.steine_ziehen(&brett);
 
+    string name1;
+    string name2;
+    cout << "Herzlich Willkommen zu Scrabble!\n\n";
+    cout << "Spieler 1, geben Sie Ihren Namen ein:\n";
+    cin >> name1;
+    p1.set_name_to(name1);
+
+    cout << "\n";
+    cout << "Spieler 2, geben Sie Ihren Namen ein:\n";
+    cin >> name2;
+    p2.set_name_to(name2);
+    cout << "\n\n";
+
     int runde = 0;
     while (true) {
         // Einen Spielzug durchfuehren
@@ -157,18 +190,18 @@ int main() {
             // Spieler 1 ist am Zug.
             if (!game_loop(&brett, &p1, true)) {
                 // Spieler 1 hat das Spiel beendet.
-                cout << "Spieler 1 hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n\n";
+                cout << name1 << " hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n\n";
                 brett.final_letters_score(p2.get_steine_lst(), &p1);
                 cout << "Insgesamt hat er also " << p1.get_score() << " Punkte.\n\n";
-                cout << "Spieler 2 hat " << p2.get_score() << " Punkte.\n\n";
+                cout << name2 << " hat " << p2.get_score() << " Punkte.\n\n";
                 break;
             }
         } else {
             // Spieler 2 ist am Zug.
             if (!game_loop(&brett, &p2, false)) {
                 // Spieler 2 hat das Spiel beendet.
-                cout << "Spieler 1 hat " << p1.get_score() << " Punkte.\n\n";
-                cout << "Spieler 2 hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
+                cout << name1 << " hat " << p1.get_score() << " Punkte.\n\n";
+                cout << name2 << "hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
                 brett.final_letters_score(p1.get_steine_lst(), &p2);
                 cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
                 break;
@@ -177,12 +210,12 @@ int main() {
         runde++; // Rundenzaehler erhoehen
     }
     if (p1.get_score() > p2.get_score()) {
-        cout << "Damit gewinnt Spieler 1. Herzlichen Glueckwunsch!\n\n";
+        cout << "Damit gewinnt "<< name1 << ". Herzlichen Glueckwunsch!\n\n";
         cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     } else if (p1.get_score() == p2.get_score()) {
         cout << "Es gibt also einen Gleichstand.";
     } else {
-        cout << "Damit gewinnt Spieler 2. Herzlichen Glueckwunsch!\n\n";
+        cout << "Damit gewinnt "<< name1 << ". Herzlichen Glueckwunsch!\n\n";
         cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     }
 
