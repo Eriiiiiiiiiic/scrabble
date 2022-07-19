@@ -15,6 +15,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     string coords = "";
     string word = "";
     string direction = "";
+    int start_score = p->get_score();
 
     markierung:
     if (is_player1) cout << "Spieler 1 ist am Zug! Hier das aktuelle Brett:\n";
@@ -127,7 +128,8 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         brett->display();
         return false;
     }
-    cout << "Er hat " << p->get_score() << " Punkte!\n\n";
+    cout << "Er hat " << (p->get_score()-start_score) << " Punkte bekommen!\n";
+    cout << "Insgesamte Punktzahl: " << p->get_score()<< "\n\n";
     cout << "Er zieht neue Steine:\n";
     p->display();
     cout << "\n\n\n";
@@ -155,31 +157,33 @@ int main() {
             // Spieler 1 ist am Zug.
             if (!game_loop(&brett, &p1, true)) {
                 // Spieler 1 hat das Spiel beendet.
-                cout << "Spieler 1 hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
+                cout << "Spieler 1 hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n\n";
                 brett.final_letters_score(p2.get_steine_lst(), &p1);
-                cout << "Insgesamt hat er also " << p1.get_score() << " Punkte.\n";
-                cout << "Spieler 2 hat " << p2.get_score() << " Punkte.\n";
+                cout << "Insgesamt hat er also " << p1.get_score() << " Punkte.\n\n";
+                cout << "Spieler 2 hat " << p2.get_score() << " Punkte.\n\n";
                 break;
             }
         } else {
             // Spieler 2 ist am Zug.
             if (!game_loop(&brett, &p2, false)) {
                 // Spieler 2 hat das Spiel beendet.
-                cout << "Spieler 1 hat " << p1.get_score() << " Punkte.\n";
+                cout << "Spieler 1 hat " << p1.get_score() << " Punkte.\n\n";
                 cout << "Spieler 2 hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
                 brett.final_letters_score(p1.get_steine_lst(), &p2);
-                cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n";
+                cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
                 break;
             }
         }
         runde++; // Rundenzaehler erhoehen
     }
     if (p1.get_score() > p2.get_score()) {
-        cout << "Damit gewinnt Spieler 1. Herzlichen Glueckwunsch!\n";
+        cout << "Damit gewinnt Spieler 1. Herzlichen Glueckwunsch!\n\n";
+        cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     } else if (p1.get_score() == p2.get_score()) {
         cout << "Es gibt also einen Gleichstand.";
     } else {
-        cout << "Damit gewinnt Spieler 2. Herzlichen Glueckwunsch!\n";
+        cout << "Damit gewinnt Spieler 2. Herzlichen Glueckwunsch!\n\n";
+        cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     }
 
     return 0;
