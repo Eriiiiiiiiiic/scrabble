@@ -468,7 +468,6 @@ void Board::place_word(string word, int x_start, int y_start,
                          "000000000000000"
                          "000000000000000";
 
-
     vector<vector<char>> letters_temp = letters;
 
     bool error = false;
@@ -617,6 +616,7 @@ void Board::place_word(string word, int x_start, int y_start,
             bonusfelder_for_points[x_start + i +  y_start*15] = '0';
         }
     }
+
     /* Hier muss der Spieler die neuen Steine ziehen: void steine_ziehen */
     player->steine_ziehen(this);
 
