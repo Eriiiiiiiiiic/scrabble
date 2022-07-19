@@ -7,9 +7,6 @@ using namespace std;
 // ____________________________________________________________________________
 Player::Player() {
     score = 0;
-//    for (int i = 0; i <= 6; i++) {
-//        stein[i] = ' ';
-//    }
     for (int i = 0; i < 27; i++) {
         steine_lst[i] = 0;
     }
@@ -31,8 +28,6 @@ void Player::steine_ziehen(Board* board) {
         } else {
             break;
         }
-
-//        }
     }
 }
 
@@ -204,10 +199,8 @@ void Player::set_name_to(string input_name){
 
 // ____________________________________________________________________________
 void Player::display() {
-    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙------♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
-//    for (int i = 0; i <= 6; i++) {
-//        cout << stein[i];
-//    }
+    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ ------♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
+    
     for (int i = 0; i < 26; i++) {
         for (int j = 0; j < steine_lst[i]; j++) {
             cout << char(i + 65);
@@ -216,5 +209,5 @@ void Player::display() {
     for (int i = 0; i < steine_lst[26]; i++) {
         cout << "&";
     }
-    cout << "   ♪------♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
+    cout << "   ♪------ ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
 }
