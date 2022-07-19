@@ -14,6 +14,7 @@ class Board;
 
 class Player{
     public:
+        string name;
         Player();
 
         // Spiele zieht neue Steine aus dem Vorrat an ziehbaren Steinen,
@@ -37,6 +38,8 @@ class Player{
         int get_num_steine();
 
         int get_score();
+
+        void set_name_to(string);
 
         // Steine ausgeben, die der Spieler zur Verfuegung hat.
         void display();
