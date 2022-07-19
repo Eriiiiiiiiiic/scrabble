@@ -102,9 +102,17 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     }
     cout << "\n";
 
+    int anzahl_steine_inital = p->get_num_steine(); //Um Bingos zu erkennen
+
     if (brett->move_is_valid(word, x, y, direction)) {
         if (p->wort_setzen(brett, word, x, y, direction)) {
             brett->place_word(word, x, y, direction, p); //hier koennen bei schlechtem Input Fehler gethrowed werden und dann gecatched.
+
+            if((p->get_num_steine()) - anzahl_steine_inital == -7){
+                cout << "\nBINGO! Glückwunsch, du hast alle Steine gleichzeitig platziert, das sind 50 Bonuspunkte!\n\n";
+                p->add_to_score(50);
+            }
+
         }
         else {
             cout << "Dir fehlen die noetigen Steine!\n";
