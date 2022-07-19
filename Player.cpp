@@ -62,7 +62,12 @@ void Player::steine_ziehen(Board* board) {
 //}
 
 // ____________________________________________________________________________
-bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, string direction) {
+bool Player::wort_setzen(Board* board, string word, bool* joker_pos,
+                         int x_start, int y_start, string direction) {
+
+    int joker_lst [26] = { };  // Speichert fuer welche Buchstaben wie viele Joker verwendet werden.
+    // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
+    int difference = 0;  // Zaehlt die Anzahl an benoetigten Jokern.
 
     int num_placed_steine = 0;  // Anzahl der gesetzten Steine.
     int word_lst [27] = { };
@@ -76,20 +81,39 @@ bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, st
         if (direction == "h") {
             if (board->letters[y_start][x_start + i] == '.') {
                 int index = int(word[i]) - 65;
-                word_lst[index]++;
-                num_placed_steine++;
+                if (joker_pos[i]) {  // Fals hier ein Joker liegen soll, wird dieser gelegt.
+                    difference++;
+                    num_placed_steine++;
+                    if (difference > steine_lst[26]) {
+                        // Es sind nicht genug Joker da, um das Wort doch noch
+                        // Buchstabieren zu koennen.
+                        return false;
+                    }
+                } else {
+                    word_lst[index]++;
+                    num_placed_steine++;
+                }
             }
         } else if (direction == "v") {
             if (board->letters[y_start + i][x_start] == '.') {
                 int index = int(word[i]) - 65;
-                word_lst[index]++;
-                num_placed_steine++;
+                if (joker_pos[i]) {  // Fals hier ein Joker liegen soll, wird dieser gelegt.
+                    difference++;
+                    num_placed_steine++;
+                    if (difference > steine_lst[26]) {
+                        // Es sind nicht genug Joker da, um das Wort doch noch
+                        // Buchstabieren zu koennen.
+                        return false;
+                    }
+                } else {
+                    word_lst[index]++;
+                    num_placed_steine++;
+                }
             }
         }
     }
-    int joker_lst [26] = { };
-    // Ueberpruefe, ob gegebenes Wort buchstabierbar ist.
-    int difference = 0;  // Zaehlt die Anzahl an benoetigten Jokern.
+
+    // Automatisch restliche Joker verteilen.
     for (int i = 0; i < 26; i++) {
         if (steine_lst[i] < word_lst[i]) {
             int wl_sl = word_lst[i] - steine_lst[i];
@@ -105,22 +129,33 @@ bool Player::wort_setzen(Board* board, string word, int x_start, int y_start, st
             }
         }
     }
+    // Positionen der gelegten Joker auf dem Brett speichern,
     if (difference > 0) {
         for (int i = word.length() - 1; i >= 0; i--) {
             int index = int(word[i]) - 65;
             if (direction == "h") {
-                if (joker_lst[index] > 0 && board->letters[y_start][x_start + i] == '.') {
-                    joker_lst[index]--;
-                    board->joker[y_start][x_start + i] = true;
+                if (board->letters[y_start][x_start + i] == '.') {
+                    if (joker_pos[i]) {
+                        board->joker[y_start][x_start + i] = true;
+                    } else if (joker_lst[index] > 0) {
+                        joker_lst[index]--;
+                        board->joker[y_start][x_start + i] = true;
+                    }
                 }
             } else if (direction == "v") {
-                if (joker_lst[index] > 0 && board->letters[y_start + i][x_start] == '.') {
-                    joker_lst[index]--;
-                    board->joker[y_start + i][x_start] = true;
+                if (board->letters[y_start + i][x_start] == '.') {
+                    if (joker_pos[i]) {
+                        board->joker[y_start + i][x_start] = true;
+                    } else if (joker_lst[index] > 0) {
+                        joker_lst[index]--;
+                        board->joker[y_start + i][x_start] = true;
+                    }
                 }
             }
         }
     }
+
+    // Benoetigte Steine abziehen.
     for (int i = 0; i < 26; i++) {
         steine_lst[i] -= word_lst[i];
     }
