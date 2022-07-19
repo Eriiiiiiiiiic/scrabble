@@ -409,37 +409,37 @@ void Board::final_letters_score(int* letters_lst, Player* p_final_move) {
         if (letters_lst[i] > 0) {
             char letter = char(i+65);
             int n = letters_lst[i];
-            cout << "Letter " << letter << " *" << n;
+            cout << "Stein " << letter << " *" << n;
             if (letter=='E' || letter=='A' || letter=='I' || letter=='O' || letter=='N' ||
                 letter=='R' || letter=='T' || letter=='L' || letter=='S' || letter=='U') {
-                cout << "\t+" << 1*n << " Point(s)\n";
+                cout << "\t+" << 1*n << " Punkt(e)\n";
                 points += 1*n;
             }
             else if (letter=='D' || letter=='G') {
-                cout << "\t+" << 2*n << " Points\n";
+                cout << "\t+" << 2*n << " Punkte\n";
                 points += 2*n;
             }
             else if (letter=='B' || letter=='C' || letter=='M' || letter=='P') {
-                cout << "\t+" << 3*n << " Points\n";
+                cout << "\t+" << 3*n << " Punkte\n";
                 points += 3*n;
             }
             else if (letter=='F' || letter=='H' || letter=='V' || letter=='W' || letter=='Y') {
-                cout << "\t+" << 4*n << " Points\n";
+                cout << "\t+" << 4*n << " Punkte\n";
                 points += 4*n;
             }
             else if (letter=='K') {
-                cout << "\t+" << 5*n << " Points\n";
+                cout << "\t+" << 5*n << " Punkte\n";
                 points += 5*n;
             }
             else if (letter=='J' || letter=='X') {
-                cout << "\t+" << 8*n << " Points\n";
+                cout << "\t+" << 8*n << " Punkte\n";
                 points += 8*n;
             }
             else if (letter=='Q' || letter=='Z') {
-                cout << "\t+" << 10*n << " Points\n";
+                cout << "\t+" << 10*n << " Punkte\n";
                 points += 10*n;
             } else {
-                cout << "\t+0 Points\n";
+                cout << "\t+0 Punkte\n";
             }
         }
     }
