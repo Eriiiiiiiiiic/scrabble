@@ -9,6 +9,9 @@
 using namespace std;
 
 
+int consecutive_passed_turns = 0;  // Globale Variable zum Zaehlen gepasster Zuege.
+
+
 bool game_loop(Board *brett, Player *p, bool is_player1) {
     markierung:
     int x = 0;
@@ -34,9 +37,10 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
             string skip = "";
             cout << "Moechtest du eine Runde aussetzen? (y/n): ";
             cin >> skip;
-            if (skip == "y") {
+            if (skip == "y") {  // Zug aussetzen
                 if (is_player1) cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
                 else cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
+                consecutive_passed_turns++;
                 return true;
             }
             goto markierung;
@@ -46,6 +50,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         if (word == "*") {  // Zug aussetzen
             if (is_player1) cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
             else cout << p->name  << " setzt eine Runde aus.\n\n\n\n";
+            consecutive_passed_turns++;
             return true;
         }
         if (p->steine_tauschen(brett, word)) {
@@ -54,6 +59,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
             cout << "Er zieht neue Steine:\n";
             p->display();
             cout << "\n\n\n";
+            consecutive_passed_turns = 0;
             return true;
         } else {
             cout << "Du besitzt nicht die Steine, die du tauschen moechtest.\n";
@@ -169,36 +175,38 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         cout << "Damit ist das Spiel beendet!\n";
         cout << endl << "Hier ist das finale Brett:\n";
         brett->display();
+        consecutive_passed_turns = 0;
         return false;
     }
     cout << "Er hat " << (p->get_score()-start_score) << " Punkte bekommen!\n";
-    cout << "Insgesamte Punktzahl: " << p->get_score()<< "\n\n";
+    cout << "Gesamtpunktzahl: " << p->get_score()<< "\n\n";
     cout << "Er zieht neue Steine:\n";
     p->display();
     cout << "\n\n\n";
 
     brett->first_word_placed = true;  // Das erste Wort wurde schon gesetzt.
 
+    consecutive_passed_turns = 0;
     return true;
 }
 
 int main() {
-cout <<"\n"
-"\n"
-"   ______________________________________________________________ \n"
-" / \\                                                             \\.\n"
-"|   |                                                            |.\n"
-" \\_ |                              _     _     _                 |.\n"
-"    |                             | |   | |   | |                |.\n"
-"    |           ___  ___ _ __ __ _| |__ | |__ | | ___            |.\n"
-"    |          / __|/ __| '__/ _` | '_ \\| '_ \\| |/ _ \\           |.\n"
-"    |          \\__ \\ (__| | | (_| | |_) | |_) | |  __/           |.\n"
-"    |          |___/\\___|_|  \\__,_|_.__/|_.__/|_|\\___|           |.\n"
-"    |                                                            |.\n"
-"    |                                                            |.\n"
-"    |    ________________________________________________________|___\n"
-"    |  /                                                            /.\n"
-"    \\_/____________________________________________________________/.\n\n\n";
+    cout <<"\n"
+    "\n"
+    "   ______________________________________________________________ \n"
+    " / \\                                                             \\\n"
+    "|   |                                                            |\n"
+    " \\_ |                              _     _     _                 |\n"
+    "    |                             | |   | |   | |                |\n"
+    "    |           ___  ___ _ __ __ _| |__ | |__ | | ___            |\n"
+    "    |          / __|/ __| '__/ _` | '_ \\| '_ \\| |/ _ \\           |\n"
+    "    |          \\__ \\ (__| | | (_| | |_) | |_) | |  __/           |\n"
+    "    |          |___/\\___|_|  \\__,_|_.__/|_.__/|_|\\___|           |\n"
+    "    |                                                            |\n"
+    "    |                                                            |\n"
+    "    |    ________________________________________________________|___\n"
+    "    |  /                                                            /\n"
+    "    \\_/____________________________________________________________/\n\n\n";
 
 
 
@@ -234,21 +242,36 @@ cout <<"\n"
             if (!game_loop(&brett, &p1, true)) {
                 // Spieler 1 hat das Spiel beendet.
                 cout << name1 << " hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n\n";
-                brett.final_letters_score(p2.get_steine_lst(), &p1);
+                brett.final_letters_score(p2.get_steine_lst(), &p1, true);
                 cout << "Insgesamt hat er also " << p1.get_score() << " Punkte.\n\n";
-                cout << name2 << " hat " << p2.get_score() << " Punkte.\n\n";
+                cout << name2 << " hat " << p2.get_score() << " Punkte, doch es werden die Werte der uebrigen Steine abgezogen:\n";
+                brett.final_letters_score(p2.get_steine_lst(), &p2, false);
+                cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
                 break;
             }
         } else {
             // Spieler 2 ist am Zug.
             if (!game_loop(&brett, &p2, false)) {
                 // Spieler 2 hat das Spiel beendet.
-                cout << name1 << " hat " << p1.get_score() << " Punkte.\n\n";
+                cout << name1 << " hat " << p1.get_score() << " Punkte, doch es werden die Werte der uebrigen Steine abgezogen:\n";
+                brett.final_letters_score(p1.get_steine_lst(), &p1, false);
+                cout << "Insgesamt hat er also noch " << p1.get_score() << " Punkte.\n\n";
                 cout << name2 << " hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
-                brett.final_letters_score(p1.get_steine_lst(), &p2);
+                brett.final_letters_score(p1.get_steine_lst(), &p2, true);
                 cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
                 break;
             }
+        }
+        if (consecutive_passed_turns >= 4) {
+            // Beide Spieler haben zweimal hintereinander gepasst, also ist das Spiel beendet.
+            cout << "Da beide Spieler in zwei aufeinanderfolgenden Runden gepasst haben, endet das Spiel.\n\n";
+            cout << name1 << " hat " << p1.get_score() << " Punkte, doch es werden die Werte der uebrigen Steine abgezogen:\n";
+            brett.final_letters_score(p1.get_steine_lst(), &p1, false);
+            cout << "Insgesamt hat er also noch " << p1.get_score() << " Punkte.\n\n";
+            cout << name2 << " hat " << p2.get_score() << " Punkte, doch es werden die Werte der uebrigen Steine abgezogen:\n";
+            brett.final_letters_score(p2.get_steine_lst(), &p2, false);
+            cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
+            break;
         }
         runde++; // Rundenzaehler erhoehen
     }

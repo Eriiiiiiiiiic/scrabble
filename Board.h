@@ -23,17 +23,23 @@ class Board{
 
         Board();
 
+        // Stellt den aktuellen Zustand des Spielbretts graphisch im Terminal
+        // dar.
         void display();
 
+        // Prueft saemtliche Voraussetzungen an einen gueltigen Spielzug.
         bool move_is_valid(string, int, int, string);
 
+        // Addiert den Wert des gegebenen Worts zu den Punkten des gegebenen
+        // Spielers.
         void word_score(string, int, int, string, Player*);
 
-        // Addiert den Wert aller Steine des Gegenspielers die dieser
-        // am Ende des Spiels noch uebrig hatte zu den Punkten des
-        // Spielers, der das Spiel beendet hat.
-        void final_letters_score(int*, Player*);
+        // Berechnet den Wert aller gegebenen Steine und addiert/subtrahiert
+        // diese zu/von den Punkten des gegebenen Spielers.
+        void final_letters_score(int*, Player*, bool);
 
+        // Setzt das gegebene Wort an der gegebenen Stelle auf das Spielbrett.
+        // Dabei werden dem Spieler auch die erzielten Punkte zugeschrienen.
         void place_word(string, int, int, string, Player*);
 };
 

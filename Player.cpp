@@ -31,7 +31,6 @@ void Player::steine_ziehen(Board* board) {
     }
 }
 
-
 // ____________________________________________________________________________
 bool Player::wort_setzen(Board* board, string word, bool* joker_pos,
                          int x_start, int y_start, string direction) {
@@ -199,8 +198,8 @@ void Player::set_name_to(string input_name){
 
 // ____________________________________________________________________________
 void Player::display() {
-    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ ------♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
-    
+    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ -----♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
+
     for (int i = 0; i < 26; i++) {
         for (int j = 0; j < steine_lst[i]; j++) {
             cout << char(i + 65);
@@ -209,5 +208,5 @@ void Player::display() {
     for (int i = 0; i < steine_lst[26]; i++) {
         cout << "&";
     }
-    cout << "   ♪------ ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
+    cout << "   ♪----- ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
 }
