@@ -36,7 +36,7 @@ Board::Board() {
 //     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
 //                        "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&";
                         /* Englische Verteilung */
-    ziehbare_steine = "EA&&&&&&&&";
+    ziehbare_steine = "&&&&&&&&&&&&&&";
 }
 
 // ____________________________________________________________________________
@@ -263,21 +263,32 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
         for(int y = 0; y < 15; y++){
             if(letters_temp[y][x]!='.'){
                 current_word += letters_temp[y][x];
+                if(y==14){ //Randfall: es liegt jetzt ein Block an Buchstaben vor!
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        //Jetzt liegt ein String/Block vor
+                        //Ist es ein Wort?
+
+                        bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
+
+                        if(!gefunden){return false;}
+
+
+                    }
+                }
             }
             else{
                 if(y!=0){
-                    if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
-                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
-                            //Jetzt liegt ein String/Block vor
-                            //Ist es ein Wort?
-                            bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        //Jetzt liegt ein String/Block vor
+                        //Ist es ein Wort?
+                        bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
 
-                            if(!gefunden){return false;}
+                        if(!gefunden){return false;}
 
 
-                        }
-                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
                     }
+                    current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+
                 }
             }
         }
@@ -293,10 +304,21 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
         for(int x = 0; x < 15; x++){
             if(letters_temp[y][x]!='.'){
                 current_word += letters_temp[y][x];
+                if(x==14){ //Randfall: es liegt jetzt ein Block an Buchstaben vor!
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        //Jetzt liegt ein String/Block vor
+                        //Ist es ein Wort?
+
+                        bool gefunden = finden(0,524288,current_word);  // 2^19 kleinste ZweierPotenz größer als die Anzahl an Zeilen im dictionary
+
+                        if(!gefunden){return false;}
+
+
+                    }
+                }
             }
             else{
                 if(x!=0){
-                    if(letters_temp[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
                         if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
                             //Jetzt liegt ein String/Block vor
                             //Ist es ein Wort?
@@ -308,7 +330,6 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
 
                         }
                         current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
-                    }
                 }
             }
         }
@@ -409,37 +430,37 @@ void Board::final_letters_score(int* letters_lst, Player* p_final_move) {
         if (letters_lst[i] > 0) {
             char letter = char(i+65);
             int n = letters_lst[i];
-            cout << "Stein " << letter << " *" << n;
+            cout << "Letter " << letter << " *" << n;
             if (letter=='E' || letter=='A' || letter=='I' || letter=='O' || letter=='N' ||
                 letter=='R' || letter=='T' || letter=='L' || letter=='S' || letter=='U') {
-                cout << "\t+" << 1*n << " Punkt(e)\n";
+                cout << "\t+" << 1*n << " Point(s)\n";
                 points += 1*n;
             }
             else if (letter=='D' || letter=='G') {
-                cout << "\t+" << 2*n << " Punkte\n";
+                cout << "\t+" << 2*n << " Points\n";
                 points += 2*n;
             }
             else if (letter=='B' || letter=='C' || letter=='M' || letter=='P') {
-                cout << "\t+" << 3*n << " Punkte\n";
+                cout << "\t+" << 3*n << " Points\n";
                 points += 3*n;
             }
             else if (letter=='F' || letter=='H' || letter=='V' || letter=='W' || letter=='Y') {
-                cout << "\t+" << 4*n << " Punkte\n";
+                cout << "\t+" << 4*n << " Points\n";
                 points += 4*n;
             }
             else if (letter=='K') {
-                cout << "\t+" << 5*n << " Punkte\n";
+                cout << "\t+" << 5*n << " Points\n";
                 points += 5*n;
             }
             else if (letter=='J' || letter=='X') {
-                cout << "\t+" << 8*n << " Punkte\n";
+                cout << "\t+" << 8*n << " Points\n";
                 points += 8*n;
             }
             else if (letter=='Q' || letter=='Z') {
-                cout << "\t+" << 10*n << " Punkte\n";
+                cout << "\t+" << 10*n << " Points\n";
                 points += 10*n;
             } else {
-                cout << "\t+0 Punkte\n";
+                cout << "\t+0 Points\n";
             }
         }
     }
