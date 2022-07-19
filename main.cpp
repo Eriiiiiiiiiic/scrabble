@@ -71,7 +71,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     try {
         y = stoi(coords.substr(1)) - 1;
     } catch (const invalid_argument& ex) {
-        cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
+        cout << "\nBitte gib die Koordinaten in der Form xn an, dabei ist:\n";
         cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
         cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
         cout << "Beispiele: b7, f15, a3, o11\n";
@@ -81,7 +81,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         goto markierung;
     }
     if (x < 0 || x > 14 || y < 0 || y > 14) {
-        cout << "Bitte gib die Koordinaten in der Form xn an, dabei ist:\n";
+        cout << "\nBitte gib die Koordinaten in der Form xn an, dabei ist:\n";
         cout << " - x ein Buchstabe zwischen a und o (x Koordinate)\n";
         cout << " - n eine ganze Zahl zwischen 1 und 15 (y Koordinate)\n";
         cout << "Beispiele: b7, f15, a3, o11\n";
@@ -91,7 +91,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         goto markierung;
     }
 
-    
+
     string word_j = "";
     cout << "Was ist dein Wort?: ";
     cin >> word_j;
@@ -127,12 +127,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         }
         index1++;
     }
-    cout << word << endl;
-    for (int i = 0; i < 15; i++) {
-        cout << joker_pos[i];
-    }
-    cout << endl;
-    
+
 
     cout << "Vertikal oder Horizontal?(v,h): ";
     cin >> direction;
@@ -249,7 +244,7 @@ cout <<"\n"
             if (!game_loop(&brett, &p2, false)) {
                 // Spieler 2 hat das Spiel beendet.
                 cout << name1 << " hat " << p1.get_score() << " Punkte.\n\n";
-                cout << name2 << "hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
+                cout << name2 << " hat " << p2.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
                 brett.final_letters_score(p1.get_steine_lst(), &p2);
                 cout << "Insgesamt hat er also " << p2.get_score() << " Punkte.\n\n";
                 break;
@@ -263,7 +258,7 @@ cout <<"\n"
     } else if (p1.get_score() == p2.get_score()) {
         cout << "Es gibt also einen Gleichstand.";
     } else {
-        cout << "Damit gewinnt "<< name1 << ". Herzlichen Glueckwunsch!\n\n";
+        cout << "Damit gewinnt "<< name2 << ". Herzlichen Glueckwunsch!\n\n";
         cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     }
 
