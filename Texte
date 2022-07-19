@@ -1,0 +1,9 @@
+- Ausarbeitung
+- Tutorial
+- Präsentation
+
+
+Ausarbeitung:
+
+Wir haben uns für das Spiel "Scrabble" entschieden, da wir dachten, dass es interessante informatische Hürden geben könnte, welche wir bewältigen müssten.
+Dazu zählen die komplizierten Regeln, die Joker, die Bonusfelder, welche nur einmal funktionieren, das effiziente Suchen von Wörtern in einem lexikographisch geordneten Wörterbuch, das bewerten der Spielzüge und vieles mehr. Wir mussten häufig kleinere Probleme lösen und uns Gedanken um die globale Struktur unseres Codes machen. Wir haben uns oft auch entscheiden müssen, was wir genau progammieren wollen: Sollte man "Ho&key" tippen um zu erklären, dass "k" ein Joker ist? Oder sollte man gar nicht angeben, wo der Joker plaziert wurde. Am Ende haben wir einen Kompromiss gefunden, bei dem beide Eingaben erlaubt sind. Dies wurde so implementiert, dass man volle flexibilität hat und sich genau aussuchen kann, was man machen möchte. Durch die Angabe von einem "&" an der entsprechenden Stelle im Wort wird für den nachfolgende Buchstaben ein Joker benutzt. Ansonsten werden automatisch alle nicht vorhandenen Buschstaben von hinten durch Joker aufgefüllt.
