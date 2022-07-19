@@ -31,35 +31,11 @@ void Player::steine_ziehen(Board* board) {
         } else {
             break;
         }
-//        // Das Array stein muss noch angepasst werden.
-//        int steinindex = 0;
-//        for (int i = 0; i < 26; i++) {
-//            for (int j = 0; j < steine_lst[i]; j++) {
-//                stein[steinindex] = char(i + 65);
-//                steinindex++;
-//            }
-//        }
-//        for (int i = 0; i < steine_lst[26]; i++) {
-//            stein[steinindex] = '&';
-//            steinindex++;
+
 //        }
     }
 }
 
-//// ____________________________________________________________________________
-//void Player::stein_setzen(char letter) {
-//    cout << "Huhu, hier bin ich!!!!!!!!!!!!\n";
-//    if (steine_lst[int(letter)] > 0) {
-//        steine_lst[int(letter)]--;
-//        num_steine--;
-//    }
-//    for (int i = 0; i < 7; i++) {
-//        if (stein[i] == letter) {
-//            stein[i] = ' ';
-//            break;
-//        }
-//    }
-//}
 
 // ____________________________________________________________________________
 bool Player::wort_setzen(Board* board, string word, bool* joker_pos,
