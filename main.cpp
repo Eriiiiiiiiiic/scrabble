@@ -10,6 +10,7 @@ using namespace std;
 
 
 bool game_loop(Board *brett, Player *p, bool is_player1) {
+    markierung:
     int x = 0;
     int y = 0;
     string coords = "";
@@ -17,7 +18,6 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     string direction = "";
     int start_score = p->get_score();
 
-    markierung:
     if (is_player1) cout << p->name << " ist am Zug! Hier das aktuelle Brett:\n";
     else cout << p->name  << " ist am Zug! Hier das aktuelle Brett:\n";
     brett->display();
@@ -91,8 +91,48 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         goto markierung;
     }
 
+    
+    string word_j = "";
     cout << "Was ist dein Wort?: ";
-    cin >> word;
+    cin >> word_j;
+
+    int index1 = 0;
+    int index2 = 0;
+    bool joker_pos[15] = {};
+    while (index1 < word_j.length()) {
+        if (word_j[index1] == '&') {
+            index1++;
+            char ch = word_j[index1];
+            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+                word.push_back(ch);
+            } else {
+                cout << "Das eingegebene Wort ist ungueltig!\n\n";  // Hier koennte noch eine genauere Fehlermeldung ausgegeben werden.
+                goto markierung;
+            }
+            joker_pos[index2] = true;
+            index2++;
+        } else {
+            char ch = word_j[index1];
+            if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+                word.push_back(ch);
+            } else {
+                cout << "Das eingegebene Wort ist ungueltig!\n\n";  // Hier koennte noch eine genauere Fehlermeldung ausgegeben werden.
+                goto markierung;
+            }
+            index2++;
+            if (index2 >= 15) {
+                cout << "Das eingegebene Wort ist zu lang!\n\n";
+                goto markierung;
+            }
+        }
+        index1++;
+    }
+    cout << word << endl;
+    for (int i = 0; i < 15; i++) {
+        cout << joker_pos[i];
+    }
+    cout << endl;
+    
 
     cout << "Vertikal oder Horizontal?(v,h): ";
     cin >> direction;
