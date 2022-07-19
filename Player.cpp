@@ -187,9 +187,13 @@ int Player::get_num_steine() {
     return num_steine;
 }
 
+void Player::set_name_to(string input_name){
+    name = input_name;
+}
+
 // ____________________________________________________________________________
 void Player::display() {
-    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ -----♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
+    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙------♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
 //    for (int i = 0; i <= 6; i++) {
 //        cout << stein[i];
 //    }
@@ -201,5 +205,5 @@ void Player::display() {
     for (int i = 0; i < steine_lst[26]; i++) {
         cout << "&";
     }
-    cout << "   ♪----- ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
+    cout << "   ♪------♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
 }
