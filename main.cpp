@@ -10,6 +10,7 @@ using namespace std;
 
 
 int consecutive_passed_turns = 0;  // Globale Variable zum Zaehlen gepasster Zuege.
+bool standard_ASCII = false;
 
 
 bool game_loop(Board *brett, Player *p, bool is_player1) {
@@ -24,7 +25,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
     if (is_player1) cout << p->name << " ist am Zug! Hier das aktuelle Brett:\n";
     else cout << p->name  << " ist am Zug! Hier das aktuelle Brett:\n";
     brett->display();
-    p->display();
+    p->display(standard_ASCII);
 
     cout << "Wo soll dein Wort beginnen?: ";
     cin >> coords;
@@ -57,7 +58,7 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
             if (is_player1) cout << p->name  << " hat Steine weggelegt.\n";
             else cout << p->name  << " hat Steine weggelegt.\n";
             cout << "Er zieht neue Steine:\n";
-            p->display();
+            p->display(standard_ASCII);
             cout << "\n\n\n";
             consecutive_passed_turns = 0;
             return true;
@@ -169,6 +170,8 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
 
     if (is_player1) cout << p->name  << " hat gespielt!\n\n";
     else cout << p->name  << " hat gespielt!\n\n";
+    cout << "Er hat " << (p->get_score()-start_score) << " Punkte bekommen!\n";
+    cout << "Gesamtpunktzahl: " << p->get_score()<< "\n\n";
     if (brett->ziehbare_steine.length() == 0 && p->get_num_steine() == 0) { // Siegbedingung pruefen
         if (is_player1) cout << p->name  << " hat keine Steine und kann keine Steine mehr ziehen. ";
         else cout << p->name  << " hat keine Steine und kann keine Steine mehr ziehen. ";
@@ -178,10 +181,8 @@ bool game_loop(Board *brett, Player *p, bool is_player1) {
         consecutive_passed_turns = 0;
         return false;
     }
-    cout << "Er hat " << (p->get_score()-start_score) << " Punkte bekommen!\n";
-    cout << "Gesamtpunktzahl: " << p->get_score()<< "\n\n";
     cout << "Er zieht neue Steine:\n";
-    p->display();
+    p->display(standard_ASCII);
     cout << "\n\n\n";
 
     brett->first_word_placed = true;  // Das erste Wort wurde schon gesetzt.
@@ -241,7 +242,7 @@ int main() {
             // Spieler 1 ist am Zug.
             if (!game_loop(&brett, &p1, true)) {
                 // Spieler 1 hat das Spiel beendet.
-                cout << name1 << " hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n\n";
+                cout << name1 << " hat " << p1.get_score() << " Punkte und erhaelt zusaetzliche Punkte:\n";
                 brett.final_letters_score(p2.get_steine_lst(), &p1, true);
                 cout << "Insgesamt hat er also " << p1.get_score() << " Punkte.\n\n";
                 cout << name2 << " hat " << p2.get_score() << " Punkte, doch es werden die Werte der uebrigen Steine abgezogen:\n";
@@ -277,12 +278,12 @@ int main() {
     }
     if (p1.get_score() > p2.get_score()) {
         cout << "Damit gewinnt "<< name1 << ". Herzlichen Glueckwunsch!\n\n";
-        cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
+        if (!standard_ASCII) cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     } else if (p1.get_score() == p2.get_score()) {
         cout << "Es gibt also einen Gleichstand.";
     } else {
         cout << "Damit gewinnt "<< name2 << ". Herzlichen Glueckwunsch!\n\n";
-        cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
+        if (!standard_ASCII) cout << "♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ ♪┏(°.°)┛┗(°.°)┓┗(°.°)┛┏(°.°)┓ ♪ \n\n\n\n\n\n   ";
     }
 
     return 0;

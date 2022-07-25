@@ -50,7 +50,7 @@ class Player{
         void set_name_to(string);
 
         // Steine ausgeben, die der Spieler zur Verfuegung hat.
-        void display();
+        void display(bool);
 
     private:
         int score;

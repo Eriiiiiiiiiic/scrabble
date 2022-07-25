@@ -197,8 +197,15 @@ void Player::set_name_to(string input_name){
 }
 
 // ____________________________________________________________________________
-void Player::display() {
-    cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ -----♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
+void Player::display(bool standard_ASCII) {
+    if (standard_ASCII) {
+        cout << "\n       -------===##[   ";
+    } else {
+        cout << "\n⋆ ♔ ♕ ♖ ♗ ♘ ♙ -----♪   "; //♚ ♛ ♜ ♝ ♞ ♟ ♔ ♕ ♖ ♗ ♘ ♙
+    }
+    for (int i = 0; i < (7 - num_steine) / 2; i++) {
+        cout << " ";
+    }
 
     for (int i = 0; i < 26; i++) {
         for (int j = 0; j < steine_lst[i]; j++) {
@@ -208,5 +215,12 @@ void Player::display() {
     for (int i = 0; i < steine_lst[26]; i++) {
         cout << "&";
     }
-    cout << "   ♪----- ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n" ;
+    for (int i = 0; i < (8 - num_steine) / 2; i++) {
+        cout << " ";
+    }
+    if (standard_ASCII) {
+        cout << "   ]##===-------       \n\n";
+    } else {
+        cout << "   ♪----- ♙ ♘ ♗ ♖ ♕ ♔ ⋆\n\n";
+    }
 }

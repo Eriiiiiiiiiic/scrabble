@@ -15,27 +15,28 @@ Board::Board() {
         vector<bool> null_vec(15,0);
         joker.push_back(null_vec);
     }
-    /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
+        /* String markiert wo auf dem Brett welche Bonusfelder liegen. */
 
-    bonusfelder_for_points = "400100040001004"
-                             "030002000200030"
-                             "003000101000300"
-                             "100300010003001"
-                             "000030000030000"
-                             "020002000200020"
-                             "001000101000100"
-                             "400100030001004"
-                             "001000101000100"
-                             "020002000200020"
-                             "000030000030000"
-                             "100300010003001"
-                             "003000101000300"
-                             "030002000200030"
-                             "400100040001004";
+        bonusfelder_for_points = "400100040001004"
+                                 "030002000200030"
+                                 "003000101000300"
+                                 "100300010003001"
+                                 "000030000030000"
+                                 "020002000200020"
+                                 "001000101000100"
+                                 "400100030001004"
+                                 "001000101000100"
+                                 "020002000200020"
+                                 "000030000030000"
+                                 "100300010003001"
+                                 "003000101000300"
+                                 "030002000200030"
+                                 "400100040001004";
 
-    ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
-                      "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&";
+//     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
+//                        "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&";
                         /* Englische Verteilung */
+    ziehbare_steine = "AAABNNS&&&";
 }
 
 // ____________________________________________________________________________
@@ -470,6 +471,10 @@ void Board::final_letters_score(int* letters_lst, Player* player, bool add_point
                 cout << "\t 0 Punkte\n";
             }
         }
+    }
+    if (letters_lst[26] > 0) {
+        int n = letters_lst[26];
+        cout << "Stein & *" << n << "\t 0 Punkte\n";
     }
     if (add_points) {
         // Berechneten Wert zu den Punkten des letzten Spielers hinzufuegen.
