@@ -8,10 +8,10 @@ Ausarbeitung:
 
 Wir haben uns für das Spiel "Scrabble" entschieden, da wir dachten, dass es interessante informatische Hürden geben könnte, welche wir bewältigen müssten.
 Dazu zählen die komplizierten Regeln, die Joker, die Bonusfelder, welche nur einmal funktionieren, das effiziente Suchen von Wörtern in einem
-lexikographisch geordneten Wörterbuch, das bewerten der Spielzüge, das Verifizieren ob der jeweilige Zug gültig ist (also ob alle echt-verbundenen Wörter
+lexikographisch geordneten Wörterbuch, das bewerten der Spielzüge und das Verifizieren ob der jeweilige Zug gültig ist (also ob alle echt-verbundenen Wörter
 an das neu plazierte Wort immernoch im Lexikon sind). Wir mussten häufig kleinere Probleme lösen und uns Gedanken um die globale Struktur unseres Codes
 machen. Wir haben uns oft auch entscheiden müssen, was wir genau progammieren wollen: Sollte man "Ho&key" tippen um zu erklären, dass "k" ein Joker ist?
-Oder sollte man gar nicht angeben, wo der Joker plaziert wurde. Am Ende haben wir einen Kompromiss gefunden, bei dem beide Eingaben erlaubt sind. Dies
+Oder sollte man gar nicht angeben, wo der Joker plaziert wurde? Am Ende haben wir einen Kompromiss gefunden, bei dem beide Eingaben erlaubt sind. Dies
 wurde so implementiert, dass man volle flexibilität hat und sich genau aussuchen kann, was man machen möchte. Durch die Angabe von einem "&" an der
 entsprechenden Stelle im Wort wird für den nachfolgende Buchstaben ein Joker benutzt. Ansonsten werden automatisch alle nicht vorhandenen Buschstaben von
 hinten durch Joker aufgefüllt. Solche Entscheidungen/Probleme sind uns häufig begegnet. Nennenswert wäre z.B. die Funktion, eine Runde auszusetzen, um neue
@@ -33,7 +33,7 @@ Problemen/Feautures gearbeitet. Durch dieses Projekt haben wir unsere Fähigkeit
 Tutorial:
 =========
 
-Am Anfang gibt man die Namen der zwei Spieler ein (dieser Name muss ohne Leerzeichen sein, z.B."Eric")
+Am Anfang gibt man die Namen der zwei Spieler ein (dieser Name muss ohne Leerzeichen sein, z.B. "Eric")
 
 In jedem Zug kann man die Koordinate eingeben, bei der das zu plazierende Wort starten soll. Das Format muss folgende Form haben: "o12", "b4", "a11"
 	Ergibt die Eingabe keinen Sinn, darf man nochmal die Koordinate eingeben.
