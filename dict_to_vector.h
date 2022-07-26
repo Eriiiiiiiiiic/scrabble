@@ -1,3 +1,5 @@
+//Projekt von Paul Schuh und Eric Trébuchon
+
 #ifndef DICT_TO_VECTOR_H
 #define DICT_TO_VECTOR_H
 
