@@ -221,7 +221,7 @@ bool Board::move_is_valid(string word, int x_start, int y_start, string directio
                             word_is_adjacent = true;
                         }
                     }
-                    if (x_start > 0) {
+                    if (y_start > 0) {
                         if (letters_temp[y_start - 1][x_start + index] != '.') {
                             word_is_adjacent = true;
                         }
