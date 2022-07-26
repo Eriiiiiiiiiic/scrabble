@@ -4,32 +4,56 @@
 
 
 Ausarbeitung:
+=============
 
 Wir haben uns für das Spiel "Scrabble" entschieden, da wir dachten, dass es interessante informatische Hürden geben könnte, welche wir bewältigen müssten.
-Dazu zählen die komplizierten Regeln, die Joker, die Bonusfelder, welche nur einmal funktionieren, das effiziente Suchen von Wörtern in einem lexikographisch geordneten Wörterbuch, das bewerten der Spielzüge, das Verifizieren ob der jeweilige Zug gültig ist (also ob alle echt-verbundenen Wörter an das neu plazierte Wort immernoch im Lexikon sind). Wir mussten häufig kleinere Probleme lösen und uns Gedanken um die globale Struktur unseres Codes machen. Wir haben uns oft auch entscheiden müssen, was wir genau progammieren wollen: Sollte man "Ho&key" tippen um zu erklären, dass "k" ein Joker ist? Oder sollte man gar nicht angeben, wo der Joker plaziert wurde. Am Ende haben wir einen Kompromiss gefunden, bei dem beide Eingaben erlaubt sind. Dies wurde so implementiert, dass man volle flexibilität hat und sich genau aussuchen kann, was man machen möchte. Durch die Angabe von einem "&" an der entsprechenden Stelle im Wort wird für den nachfolgende Buchstaben ein Joker benutzt. Ansonsten werden automatisch alle nicht vorhandenen Buschstaben von hinten durch Joker aufgefüllt. Solche Entscheidungen/Probleme sind uns häufig begegnet. Nennenswert wäre z.B. die Funktion, eine Runde zu passen, um neue (bessere) Steine zu ziehen. Wir haben vieles gelernt, z.B. wie Header-Dateien funktionieren, wie man Dateien liest/bearbeitet in C++, wie man mit Pointern in einem Projekt arbeitet, wie man Farben sowohl in Linux, als auch Windows darstellen kann (und erkennt was für ein Betriebssystem vorliegt) und wie man im Team organisiert (Github) und fokusiert arbeitet. Dafür haben wir uns jeden Dienstag längere Zeit getroffen und haben parallel an verschiedenen Problemen/Feautures gearbeitet. Durch dieses Projekt haben wir unsere Fähigkeiten im Programmieren in C++ deutlich verbessert
+Dazu zählen die komplizierten Regeln, die Joker, die Bonusfelder, welche nur einmal funktionieren, das effiziente Suchen von Wörtern in einem
+lexikographisch geordneten Wörterbuch, das bewerten der Spielzüge, das Verifizieren ob der jeweilige Zug gültig ist (also ob alle echt-verbundenen Wörter
+an das neu plazierte Wort immernoch im Lexikon sind). Wir mussten häufig kleinere Probleme lösen und uns Gedanken um die globale Struktur unseres Codes
+machen. Wir haben uns oft auch entscheiden müssen, was wir genau progammieren wollen: Sollte man "Ho&key" tippen um zu erklären, dass "k" ein Joker ist?
+Oder sollte man gar nicht angeben, wo der Joker plaziert wurde. Am Ende haben wir einen Kompromiss gefunden, bei dem beide Eingaben erlaubt sind. Dies
+wurde so implementiert, dass man volle flexibilität hat und sich genau aussuchen kann, was man machen möchte. Durch die Angabe von einem "&" an der
+entsprechenden Stelle im Wort wird für den nachfolgende Buchstaben ein Joker benutzt. Ansonsten werden automatisch alle nicht vorhandenen Buschstaben von
+hinten durch Joker aufgefüllt. Solche Entscheidungen/Probleme sind uns häufig begegnet. Nennenswert wäre z.B. die Funktion, eine Runde auszusetzen, um neue
+(bessere) Steine zu ziehen.
+Oft mussten wir uns Gedanken darüber machen, in welcher Form wir bestimmte Daten am besten abspeichern können, um effizient darauf zugreifen zu können.
+Beispielsweise lesen wir zum Nachschlagen von Wörtern das Wörterbuch einmal zu Begin des Programms in einen Vektor ein, um darauf eine binäre Suche
+anwenden zu können. Denn beim Lesen in einer Datei konnten wir nicht ohne weiteres zu einer beliebigen Zeile springen, was aber bei der binären Suche
+notwendig ist. Beim Speichern der gezogenen Steinen haben wir ein ganzzahliges Array mit 27 Einträgen benutzt, bei denen jeder Eintrag für einen Buchstaben
+von A bis Z (und der 27ste Eintrag für den Joker "&") steht. So ist es sehr einfach zu prüfen, ob ein gegebenes Wort mit den gezogenen Steinen
+buchstabierbar ist.
+Wir haben vieles gelernt, z.B. wie Header-Dateien funktionieren, wie man Dateien liest/bearbeitet in C++, wie man mit Pointern
+in einem Projekt arbeitet, wie man Farben sowohl in Linux, als auch Windows darstellen kann (und erkennt was für ein Betriebssystem vorliegt) und wie man
+im Team organisiert (Github) und fokusiert arbeitet. Dafür haben wir uns jeden Dienstag längere Zeit getroffen und haben parallel an verschiedenen
+Problemen/Feautures gearbeitet. Durch dieses Projekt haben wir unsere Fähigkeiten im Programmieren in C++ deutlich verbessert.
 
 
 
 
 Tutorial:
+=========
 
 Am Anfang gibt man die Namen der zwei Spieler ein (dieser Name muss ohne Leerzeichen sein, z.B."Eric")
 
-In jedem Zug kann man die Koordinate eingeben, bei der das zu plazierende Wort starten soll. Das format muss folgende Form haben: "o12", "b4", "a11"
+In jedem Zug kann man die Koordinate eingeben, bei der das zu plazierende Wort starten soll. Das Format muss folgende Form haben: "o12", "b4", "a11"
 	Ergibt die Eingabe keinen Sinn, darf man nochmal die Koordinate eingeben.
 
-	Falls man möchte, kann man für die Koordinate jedoch "*" eingeben. Dies gibt einem die Möglichkeit, seine jetzigen Steine auszutauschen, um neue/bessere Steine zu erhalten. Dies ist als Zug 		gewertet. Dabei muss man alle schlechten Buchstaben hinschreiben, z.B. "CKDF" tauscht/ersetzt diese Buchstaben durch neue Buchstaben.
+	Falls man möchte, kann man für die Koordinate jedoch "*" eingeben. Dies gibt einem die Möglichkeit, seine jetzigen Steine auszutauschen, um
+	neue/bessere Steine zu erhalten. Dies wird als Zug gewertet. Dabei gibt man diejenigen Buchstaben an, die man tauschen möchte. Z.B. werden
+	bei der Eingabe "CKDF" gerade diese Buchstaben weggelegt (falls man sie denn besitzt) und durch Buchstaben aus dem Beutel ersetzt.
 
-		Falls man nach dem Eingaben von "*" für die Koordinate aber erneut "*" schreibt (anstatt die schlechten Buchstaben), dann passt man seinen jetzigen Zug.
+	Falls man auch für die zu tauschenden Buchstaben ein "*" eingibt (anstatt die schlechten Buchstaben), dann wird der jetzige Zug gepasst.
 
- Angenommen wir haben jetzt eine valide Koordinate eingegeben, dann folgt das eingeben vom Wort. Groß-/kleinschreibung ist egal, dies wird durch unser Program angepasst.
- Die Spielsprache ist englisch und es gelten die offziellen Scrabble-Regeln für die Gültigkeit von Wörtern.
- Falls die Eingabe Fehlerhaft ist, wird das nach dem nächsten Schritt erkannt
+ Angenommen wir haben jetzt eine valide Koordinate eingegeben, dann folgt das Eingeben eines Wortes. Groß-/kleinschreibung ist egal, dies wird durch
+ unser Program angepasst. Die Spielsprache ist englisch und es gelten die offziellen Scrabble-Regeln für die Gültigkeit von Wörtern.
+ Falls die Eingabe fehlerhaft ist, wird das nach dem nächsten Schritt erkannt.
  
- Nun muss eine Richtung angegeben werden. Dafür schreibt man "h" für horizontal, oder "v" für vertikal.
+ Nun muss eine Richtung angegeben werden, in die das Wort gelegt wird. Dafür schreibt man "h" für horizontal, oder "v" für vertikal.
  Falls die Eingabe Fehlerhaft ist, wird die gesamte Eingabe neu abgefragt.
  
  Jetzt sollte der Zug beendet sein und man erhält alle nötigen Infos über: erhaltene Punkte, neu gezogene Buchstaben und wer jetzt am Zug ist.
  
  
  So verläuft das Spiel, bis jemand keine Steine mehr hat, womit das Spiel endet.
+ Das Spiel kann auch beendet werden, indem beide Spieler in zwei aufeinanderfolgenden Runden ihre Züge passen.
+ 
