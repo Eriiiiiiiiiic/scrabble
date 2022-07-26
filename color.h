@@ -1,3 +1,5 @@
+//Projekt von Paul Schuh und Eric Trébuchon
+
 #ifndef COLOR_H_
 #define COLOR_H_
 
