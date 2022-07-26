@@ -57,3 +57,21 @@ In jedem Zug kann man die Koordinate eingeben, bei der das zu plazierende Wort s
  So verläuft das Spiel, bis jemand keine Steine mehr hat, womit das Spiel endet.
  Das Spiel kann auch beendet werden, indem beide Spieler in zwei aufeinanderfolgenden Runden ihre Züge passen.
  
+ 
+ Tipps:
+ ======
+ 
+ Verwenden Sie am besten die Terminal "  gnome-terminal -t $TITLE -x  ", dort ist die Formatierung korrekt und es kommen keine Probleme vor.
+ 
+ Falls Sie irgendwo etwas eingeben, was sie umkehren möchten (z.B. eine falsche Koordinate für das Wort), dann können Sie einfach in Ihrer
+ jetzigen Eingabe (z.B. das Wort was plaziert werden soll) etwas fehlerhaftes schreiben (z.B. "aslidblsasd", denn dies ist kein Wort
+ und es fehlen einem die Buchstaben dafür). Dies funktioniert auch nach der Eingabe von "*", falls man eigentlich gar keine Steine
+ austauschen wollte und keine Runde passen wollen. 
+ 
+ Falls Sie Windows verwenden, dann müssen Sie in Zeile 13 von main.cpp die bool-Variable "standard_ASCII" auf "true" setzen, damit 
+ komische Symbole, die wir in der Darstellung verwendet haben, durch ASCII symbole ersetzt werden.
+ 
+ Fullscreen ist empfehlenswert, jedoch nicht nötig.
+ 
+ Falls Sie wissen wollen, ob ein bestimmtes Wort in Scrabble erlaubt ist, können Sie in unserer "dictionary.txt"-Datei
+ mit "Strg + F" danach suchen.
