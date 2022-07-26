@@ -69,8 +69,8 @@ In jedem Zug kann man die Koordinate eingeben, bei der das zu plazierende Wort s
  
  
  
- Tipps:
- ======
+ Hinweise:
+ =========
  
  Verwenden Sie am besten die Terminal "  gnome-terminal -t $TITLE -x  ", dort ist die Formatierung korrekt und es kommen keine Probleme vor.
  
