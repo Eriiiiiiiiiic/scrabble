@@ -1,3 +1,5 @@
+//Projekt von Paul Schuh und Eric Trébuchon
+
 #include <iostream>
 #include <string>
 #include <vector>
