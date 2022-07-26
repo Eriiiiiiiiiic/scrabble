@@ -1,3 +1,5 @@
+//Projekt von Paul Schuh und Eric Trébuchon
+
 #include "./Board.h"
 #include "./Player.h"
 #include "./color.h"
