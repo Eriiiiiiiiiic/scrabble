@@ -1,3 +1,5 @@
+//Projekt von Paul Schuh und Eric Trébuchon
+
 #ifndef FINDEN_H_
 #define FINDEN_H_
 
