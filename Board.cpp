@@ -35,10 +35,9 @@ Board::Board() {
                                  "030002000200030"
                                  "400100040001004";
 
-//     ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
-//                        "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&";
+   ziehbare_steine = "EEEEEEEEEEEEAAAAAAAAAIIIIIIIIIOOOOOOOONNNNNNRRRRRR"
+                     "TTTTTTLLLLSSSSUUUUDDDDGGGBBCCMMPPFFHHVVWWYYKJXQZ&&";
                         /* Englische Verteilung */
-    ziehbare_steine = "AAABNNS&&&";
 }
 
 // ____________________________________________________________________________
