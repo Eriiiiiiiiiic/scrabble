@@ -566,7 +566,7 @@ void Board::place_word(string word, int x_start, int y_start,
 
     letters = letters_temp;
 
-    /*Hier muessen die plazierten Wörter ueberprueft werden */
+    /* Hier muessen die plazierten Wörter ueberprueft werden */
 
     /* Hier muss ueberprueft werden, ob Player p die nötigen Steine besitzt */
 
@@ -575,35 +575,50 @@ void Board::place_word(string word, int x_start, int y_start,
 
 
 
-    //ALLE WÖRTER DURCHLAUFEN. FALLS EIN BUCHSTABE VOM NEUEN WORT KOMMT, BERECHNE SCORE.
+    // ALLE WÖRTER DURCHLAUFEN. FALLS EIN BUCHSTABE VOM NEUEN WORT KOMMT, BERECHNE SCORE.
 
-        //hier wird vertikal geprüft
+        // hier wird vertikal geprüft
     for(int x = 0; x < 15; x++){
         string current_word = "";
 
         for(int y = 0; y < 15; y++){
             if(letters[y][x]!='.'){
                 current_word += letters[y][x];
+                if(y == 14) {  // Randfall: Wort reicht bis zum Rand
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        // Jetzt liegt ein String/Block vor
+                        bool contains_new_letter = false;
+                        for(int i=0; i<current_word.length(); i++){
+                            if(changes[x+(y-current_word.length() + i)*15]=='1'){
+                                contains_new_letter = true;
+                                break;
+                            }
+                        }
+                        if(contains_new_letter == true){
+                            // FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                            word_score(current_word,x,y-current_word.length(),"v",player);
+                        }
+                    }
+                    current_word = ""; // Um die Suche nach einem neuen Wort zu erlauben
+                }
             }
             else{
                 if(y!=0){
-                    if(letters[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
-                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
-                            //Jetzt liegt ein String/Block vor
-                            bool contains_new_letter = false;
-                            for(int i=0; i< current_word.length();i++){
-                                if(changes[x+(y-current_word.length()  +  i)*15]=='1'){
-                                    contains_new_letter = true;
-                                    break;
-                                }
-                            }
-                            if(contains_new_letter == true){
-                            //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
-                                word_score(current_word,x,y-current_word.length(),"v",player);
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        // Jetzt liegt ein String/Block vor
+                        bool contains_new_letter = false;
+                        for(int i=0; i<current_word.length(); i++){
+                            if(changes[x+(y-current_word.length() + i)*15]=='1'){
+                                contains_new_letter = true;
+                                break;
                             }
                         }
-                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                        if(contains_new_letter == true){
+                            // FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                            word_score(current_word,x,y-current_word.length(),"v",player);
+                        }
                     }
+                    current_word = ""; // Um die Suche nach einem neuen Wort zu erlauben
                 }
             }
         }
@@ -612,38 +627,52 @@ void Board::place_word(string word, int x_start, int y_start,
 
 
 
-    //hier wird horizontal geprüft
+    // hier wird horizontal geprüft
     for(int y = 0; y < 15; y++){
         string current_word = "";
 
         for(int x = 0; x < 15; x++){
             if(letters[y][x]!='.'){
                 current_word += letters[y][x];
+                if(x == 14) {
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        // Jetzt liegt ein String/Block vor
+                        bool contains_new_letter = false;
+                        for(int i=0; i< current_word.length(); i++){
+                            if(changes[x-current_word.length()  + i +  y*15]=='1'){
+                                contains_new_letter = true;
+                            }
+                        }
+                        if(contains_new_letter == true){
+                        // FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                            word_score(current_word,x-current_word.length(),y,"h",player);
+                        }
+                    }
+                    current_word = ""; // Um die Suche nach einem neuen Wort zu erlauben
+                }
             }
             else{
                 if(x!=0){
-                    if(letters[y][x]=='.'){  //Also ist das jetzige Element '.', aber davor war das Ende eines Buchstabens.
-                        if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
-                            //Jetzt liegt ein String/Block vor
-                            bool contains_new_letter = false;
-                            for(int i=0; i< current_word.length();i++){
-                                if(changes[x-current_word.length()  + i +  y*15]=='1'){
-                                    contains_new_letter = true;
-                                }
-                            }
-                            if(contains_new_letter == true){
-                            //FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
-                                word_score(current_word,x-current_word.length(),y,"h",player);
+                    if(current_word.length()>1){ // einzelne Buchstaben sollen nicht als Wörter identifiziert werden! z.B. vertikal im Wort B E E soll nicht "B" überprüft werden.
+                        // Jetzt liegt ein String/Block vor
+                        bool contains_new_letter = false;
+                        for(int i=0; i< current_word.length(); i++){
+                            if(changes[x-current_word.length()  + i +  y*15]=='1'){
+                                contains_new_letter = true;
                             }
                         }
-                        current_word = ""; //Um die Suche nach einem neuen Wort zu erlauben
+                        if(contains_new_letter == true){
+                        // FALLS zwischen x,y-current_word.length()   und x,y  ein change[i+j*15] == 1 ist, hat dieses Wort etwas neues und muss gezählt werden!
+                            word_score(current_word,x-current_word.length(),y,"h",player);
+                        }
                     }
+                    current_word = ""; // Um die Suche nach einem neuen Wort zu erlauben
                 }
             }
         }
     }
 
-    //Alle Bonusfelder die überdeckt sind vom neuen Wort müssen neutralisiert werden:
+    // Alle Bonusfelder die überdeckt sind vom neuen Wort müssen neutralisiert werden:
 
 
     if(direction == "v"){
